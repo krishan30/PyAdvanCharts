@@ -73,7 +73,7 @@ class Chord_():
 
         open_graph_btn = customtkinter.CTkButton(master=frame_right,
                                                 text="Open",
-                                                command=lambda : draw_plotly(frame_right)
+                                                command=lambda : draw_simple_matplotlib_chart(frame_right)
                                     )
         open_graph_btn.grid(row=5, column=3, pady=10)
 
