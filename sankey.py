@@ -56,11 +56,11 @@ class Sankey():
 
         #==================Play with different graphs========================
 
-        #draw_simple_matplotlib_chart(frame_right)
+        draw_simple_matplotlib_chart(frame_right)
         #draw_simple_seaborn_chart(frame_right)
         #draw_iris_data(frame_right)
         #draw_chord(frame_right)
-        draw_chord_1(frame_right)
+        #draw_chord_1(frame_right)
         #draw_plotly(frame_right)
 
         file_name_label = customtkinter.CTkLabel(master=frame_right,
@@ -73,7 +73,7 @@ class Sankey():
 
         open_graph_btn = customtkinter.CTkButton(master=frame_right,
                                                 text="Open",
-                                                command=lambda : draw_plotly(frame_right)
+                                                command=lambda : draw_simple_matplotlib_chart(frame_right)
                                     )
         open_graph_btn.grid(row=5, column=3, pady=10)
 
