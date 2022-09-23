@@ -5,6 +5,17 @@ from string import ascii_letters
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+from charts.sankey_chart import SankeyChart
+
+
+#function for drawing our sankey chart
+def draw_sankey(root):
+    sankeychart=SankeyChart("./csv_samples/sankey_sample.csv")
+    figure = sankeychart.generate_chart()
+   
+    chart = FigureCanvasTkAgg(figure, root)
+    return chart
+    #chart.get_tk_widget().grid(row=1, column=2,columnspan=2, rowspan=4, pady=2, padx=20, sticky="ns")
 
 
 

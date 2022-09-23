@@ -1,0 +1,17 @@
+from,to,weight
+Ashok,Study,60
+Keerthi,Food,5
+Susi,Sport,8
+Meena,Music,10
+Ashok,Food,20
+Meena,Sport,30
+Keerthi,Study,15
+Ashok,Music,10
+Ashok,Sport,10
+Keerthi,Sport,30
+Keerthi,Music,40
+Susi,Study,10
+Susi,Music,40
+Susi,Food,70
+Meena,Study,70
+Meena,Food,30

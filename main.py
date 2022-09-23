@@ -1,7 +1,7 @@
 import customtkinter
 
-from home_frame_factory import HomeFrameFactory
-import tab_layout
+from helpers.home_frame_factory import HomeFrameFactory
+import components.tab_layout as tab_layout
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -16,7 +16,10 @@ class App(customtkinter.CTk):
         super().__init__()
 
         self.title("PyAdvanceCharts")
-        self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
+        #self.geometry(f"{App.WIDTH}x{App.HEIGHT}")
+        
+        self.minsize(App.WIDTH, App.HEIGHT)
+        self.state('zoomed')
         self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
 
         # ============ create two frames ============
@@ -26,7 +29,6 @@ class App(customtkinter.CTk):
         self.grid_rowconfigure(0, weight=1)
 
         
-        #self.frame_right=home_frame.get_home_frame(self)    #declare home
         self.frame_right=HomeFrameFactory.get_home_frame(0,self) #declare home
         self.frame_left = tab_layout.get_tab_frame(self)       #declare vertical tab
 
