@@ -6,7 +6,8 @@ import pandas as pd
 
 def  get_table(root):
     
-    csv_data = pd.read_csv('https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv')
+    #csv_data = pd.read_csv('https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.csv')
+    csv_data = pd.read_csv('./csv_samples/sankey_sample.csv')
     k = csv_data.shape
     #print(k)
     values = csv_data.values
@@ -29,7 +30,7 @@ def  get_table(root):
 
     for i in range(1,k[1]+1):
         #print(i)
-        tree.heading(i, text=i)#(k for k in range(k[1]))
+        tree.heading(i, text=columns[i-1])#(k for k in range(k[1]))
         tree.column(i, width = 80)
 
 
