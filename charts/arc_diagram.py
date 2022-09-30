@@ -14,7 +14,7 @@ class ArcDiagram:
     font_size = 10
     fig = plt.figure(figsize=(6, 6))
 
-    def __init__(self, path, graph_colour="blue"):
+    def __init__(self, path, graph_colour="blue", title="", background_colour="white"):
         self.nodes_count = None
         self.nodes = None
         self.positions_of_nodes = None
@@ -25,6 +25,8 @@ class ArcDiagram:
         self.num_of_rows = None
         self.path = path
         self.graph_colour = graph_colour
+        self.title = title
+        self.background_colour = background_colour
 
         # previously clicked node details are stored in here
         self.previously_selected_node = 0
@@ -36,15 +38,31 @@ class ArcDiagram:
         # Keeps record of weights for each node pairs used to make arcs
         self.lines_with_weights = {}
 
-    # Return required information from file
+
     def get_information_from_file(self):
+        """
+        Return the collection of details for selected file for draw
+        arc diagram. Returns count of rows for given csv file, from
+        nodes list, to nodes list and weights list.
+
+        :return: number of nodes, from nodes list, to nodes list, weight list
+        """
+
         df = pd.read_csv(self.path)
         num_of_rows, num_of_cols = df.shape
         node1, node2, weight = df.columns
         return num_of_rows, df[node1], df[node2], df[weight]
 
-    # Get nodes positions array
+
     def get_nodes_positions(self, nodes_list):
+        """
+        Return nodes positions for the graph for given nodes list
+
+        :param nodes_list: list of nodes
+        :return: dictionary with details of position of each node for
+        given nodes list
+        """
+
         positions_of_nodes = {}
         x_pos = 0
         for node in nodes_list:
@@ -52,16 +70,36 @@ class ArcDiagram:
             x_pos += 1
         return positions_of_nodes
 
-    # Return sorted nodes list with positions array for given two nodes list
     def get_sorted_list_of_nodes_with_positions(self, src_lst, tar_lst):
+        """
+        Combine the src_list and tar_lst and return sorted list of nodes
+        in ascending order and dictionary with details of nodes position
+        in the graph.
+
+        :param src_lst: from nodes list
+        :param tar_lst: to nodes list
+        :return: sorted list of nodes in ascending order and dictionary
+        with details of nodes position in the diagram
+        """
+
         nodes_list = src_lst.to_list()
         nodes_list.extend(tar_lst.to_list())
         nodes_list = list(set(nodes_list))
         nodes_list.sort()
         return nodes_list, self.get_nodes_positions(nodes_list)
 
-    # Set weights for each line when there are duplicated node pairs in data
     def set_lines_weights_for_duplicate_data(self, sources, targets, weights, num_of_rows):
+        """
+        Set list of weights for each arc by getting the sum of weights
+        for duplicate node pairs in the graph and return none.
+
+        :param sources: from nodes list
+        :param targets: to nodes list
+        :param weights: weight list for each node pair
+        :param num_of_rows:
+        :return: none
+        """
+
         pairs = []
         for row in range(num_of_rows):
             if (sources[row], targets[row]) in pairs:
@@ -72,17 +110,42 @@ class ArcDiagram:
                 pairs.append((sources[row], targets[row]))
                 self.lines_with_weights[(sources[row], targets[row])] = weights[row]
 
-    # Set weights for each line when there are no duplicated node pairs in data
     def set_lines_weights_for_no_duplicate_data(self, sources, targets, weights, num_of_rows):
+        """
+        Set weights of arc for each pair of nodes in the graph and
+        return none.
+
+        :param sources: from nodes list
+        :param targets: to nodes list
+        :param weights: weight list for each node pair
+        :param num_of_rows:
+        :return: none
+        """
+
         for row in range(num_of_rows):
             self.lines_with_weights[(sources[row], targets[row])] = weights[row]
 
-    # Get lines details with weights
     def get_lines_details(self):
+        """
+        Return details about arcs with weights for the graph
+
+        :return: Dictionary with details about arcs(nodes pair)
+        and weights of each arc
+        """
         return self.lines_with_weights
 
-    # Add or change text related to node
-    def add_or_change_node_text(self, node_index, color, weight, nodes):
+    def add_node_text(self, node_index, color, weight, nodes):
+        """
+        Add node text in the diagram with the given attributes
+        for the text decoration and return none.
+
+        :param node_index: position of the node in the graph
+        :param color: font colour
+        :param weight: type of text decoration (normal, regular,..)
+        :param nodes: list of nodes for the graph
+        :return: none
+        """
+
         node_index = int(node_index)
         label = nodes[node_index]
 
@@ -97,8 +160,18 @@ class ArcDiagram:
                          color=color,
                          ha='left')
 
-    # Draw arc
     def draw_arc(self, src, des, color, gid):
+        """
+        Draw arc in the graph using between src(node) and des(node) using
+        given color and return none.
+
+        :param src: from node
+        :param des: to node
+        :param color: arc colour
+        :param gid: graph id
+        :return: none
+        """
+
         x1 = self.positions_of_nodes[src]
         x2 = self.positions_of_nodes[des]
         arc = Arc(((x1 + x2) / 2, 0), abs(x2 - x1), abs(x2 - x1), 0, 0, 180, color=color,
@@ -108,6 +181,19 @@ class ArcDiagram:
 
     # Check given cordinates on any arcs or not. If it is on the arc, return arc id
     def check_point_on_arc_or_not(self, x_co, y_co):
+        """
+        Check given x coordinate(x_co) and y coordinate(y_co) on any arc or not in
+        the graph.
+
+        If point on any arc, return graph id of arc.
+
+        If point is not in any arc, return (-1)
+
+        :param x_co: x coordinate
+        :param y_co: y coordinate
+        :return: graph id or (-1)
+        """
+
         if y_co < 0:
             return -1
         for i in range(len(self.arc_equations)):
@@ -118,22 +204,36 @@ class ArcDiagram:
                 return i
         return -1
 
-    # Change arc colour
-    def change_patch_color(self, n, color):
-        self.ax.patches[n].set_color(color)
-        self.fig.canvas.draw()
-        self.fig.canvas.flush_events()
-        plt.show()
+    def change_arc_color(self, n, color):
+        """
+        Change color of the arc and return none.
 
-    # change color of the lines that are starting or ending from given point
+        :param n: graph id of arc
+        :param color: colour to change the arc
+        :return: none
+        """
+
+        self.ax.patches[n].set_color(color)
+
     def change_line_colors_for_point(self, point, color):
+        """
+        Change colours of all the arcs connected to the given point.
+        Change colours of arcs to given colour and return none. Show
+        the weight of those arcs on top of the arc.
+
+        :param point: selected node
+        :param color: colour to change on arc
+        :return: none
+        """
+
         node_index = list(self.positions_of_nodes.values()).index(point)
         node_name = list(self.positions_of_nodes.keys())[node_index]
 
         index_lst = self.sources.index[self.sources == node_name].tolist()
         index_lst.extend(self.targets.index[self.targets == node_name].tolist())
         for index in index_lst:
-            self.ax.patches[index].set_color(color)
+            self.change_arc_color(index, color)
+
             # h, r = self.arc_equations[index]
             # text_color = color
             # weight = 'regular'
@@ -145,8 +245,14 @@ class ArcDiagram:
             #                  ha='left', va='bottom', color=text_color, weight=weight)
         return self.fig
 
-    # When user click on a node, change line colors related to selected node.
     def click_on_node(self, event):
+        """
+        Change the colours of selected node, arcs connected to selected node
+        and return none.
+
+        :param event: event
+        :return: none
+        """
         x1, y1 = event.xdata, event.ydata
         x_co = round(x1, 1)
         y_co = round(y1, 0)
@@ -158,35 +264,46 @@ class ArcDiagram:
             self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
             self.ax.scatter(x_co, 0, marker='o', color=self.graph_selection_colour)
             # Change node text styles
-            self.add_or_change_node_text(self.previously_selected_node, self.graph_background_colour, "bold",
-                                         self.nodes)
-            self.add_or_change_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
-            self.add_or_change_node_text(x_co, self.graph_background_colour, "regular", self.nodes)
-            self.add_or_change_node_text(x_co, self.graph_selection_colour, "bold", self.nodes)
+            self.add_node_text(self.previously_selected_node, self.graph_background_colour, "bold",
+                               self.nodes)
+            self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
+            self.add_node_text(x_co, self.graph_background_colour, "regular", self.nodes)
+            self.add_node_text(x_co, self.graph_selection_colour, "bold", self.nodes)
             self.previously_selected_node = x_co
         else:
             self.change_line_colors_for_point(self.previously_selected_node, self.graph_colour)
-            self.add_or_change_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
-            self.add_or_change_node_text(self.previously_selected_node, self.graph_background_colour, "bold",
-                                         self.nodes)
-            self.add_or_change_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
+            self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
+            self.add_node_text(self.previously_selected_node, self.graph_background_colour, "bold",
+                               self.nodes)
+            self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
             self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
 
-    # When user click on a point in arc
     def click_on_arc(self, event):
+        """
+        Change the colour of selected arc and update the details of
+        the selected arc on details box on left top corner and return
+        none.
+
+        :param event: event
+        :return: none
+        """
         x_coordinate, y_coordinate = event.xdata, event.ydata
         arc_id = self.check_point_on_arc_or_not(x_coordinate, y_coordinate)
         from_node = ""
         to_node = ""
         line_weight = 0
+
         if self.previously_selected_arc > 0:
-            self.ax.patches[self.previously_selected_arc].set_color(self.graph_colour)
+            self.change_arc_color(self.previously_selected_arc, self.graph_colour)
+            # self.ax.patches[self.previously_selected_arc].set_color(self.graph_colour)
             self.previously_selected_arc = -1
+
         if arc_id >= 0:
             from_node = self.sources[arc_id]
             to_node = self.targets[arc_id]
             line_weight = self.weights[arc_id]
-            self.ax.patches[arc_id].set_color(self.clicked_line_color)
+            self.change_arc_color(arc_id, self.clicked_line_color)
+            # self.ax.patches[arc_id].set_color(self.clicked_line_color)
             self.previously_selected_arc = arc_id
 
         # Clear the previously created box in the graph
@@ -204,23 +321,75 @@ class ArcDiagram:
         self.ax.text(0.03, 0.95, textstr, transform=self.ax.transAxes, fontsize=10,
                      verticalalignment='top', bbox=props)
 
-    # Get equations of arc
     def get_arc_equations(self):
+        """
+        Return the list of set of characteristics for equations related to
+        arcs on the graph. Characteristics set contains x coordinate of
+        center point of the circle and radius value of the circle.
+
+        :return: list of set of characteristics for equations
+        """
         return self.arc_equations
 
-    # Set equations of arc
     def set_arc_equations(self, arc_equations):
+        """
+        Set the characteristics for arc_equations related to graph and
+        return none. Characteristics set contains x coordinate of
+        center point of the circle and radius value of the circle.
+
+        :param arc_equations: Set of characteristics for arcs
+        :return: none
+        """
         self.arc_equations = arc_equations
 
     # Set weights (For testing purpose)
     def set_weights(self, weights):
+        """
+        Set the weights list related to arcs drawing in the graph and
+        return none.
+
+        :param weights: list of weights for each arc
+        :return: none
+        """
         self.weights = weights
 
     # Set nodes count (For testing purpose)
     def set_nodes_count(self, nodes_count):
+        """
+        Set the count of nodes in the graph and return none.
+
+        :param nodes_count: number of counts in the graph
+        :return: none
+        """
         self.nodes_count = nodes_count
 
+    def set_background_colour(self, background_colour):
+        """
+        Set the background colour of the diagram for the plot and
+        :return none.
+
+        :param background_colour: colour to change background
+        :return: none
+        """
+        self.background_colour = background_colour
+
+    # Change font size of the graph
+    def set_font_size(self, font_size):
+        """
+        Set font size used in the graph and return none.
+
+        :param font_size: value of font size to change
+        :return: none
+        """
+        self.font_size = font_size
+
     def generate_chart(self):
+        """
+        Generate chart using values of attributes in the graph and
+        :return none.
+
+        :return: none
+        """
 
         self.num_of_rows, self.sources, self.targets, self.weights = self.get_information_from_file()
         self.nodes, self.positions_of_nodes = self.get_sorted_list_of_nodes_with_positions(self.sources, self.targets)
@@ -234,6 +403,8 @@ class ArcDiagram:
         self.ax.set_xlim(-1, self.nodes_count + 1)
         self.fig.canvas.set_window_title('Arc diagram')
         self.ax.axis('off')
+        self.ax.title.set_text(self.title)
+        self.fig.set_facecolor(self.background_colour)
 
         # Position the nodes in the graph
         xs = [i for i in range(self.nodes_count)]
@@ -258,7 +429,7 @@ class ArcDiagram:
 
         # Add names in nodes
         for x_co in xs:
-            self.add_or_change_node_text(x_co, 'blue', 'regular', self.nodes)
+            self.add_node_text(x_co, 'blue', 'regular', self.nodes)
 
         # Add events
         self.fig.canvas.mpl_connect('button_press_event', self.click_on_node)
@@ -266,8 +437,4 @@ class ArcDiagram:
 
         self.fig.tight_layout()
 
-        # self.figure=plt.figure()
-        # plt.gcf().set_size_inches(6, 6)
-
         return self.fig
-        # return self.figure
