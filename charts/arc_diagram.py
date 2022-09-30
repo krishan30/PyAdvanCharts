@@ -234,15 +234,16 @@ class ArcDiagram:
         for index in index_lst:
             self.change_arc_color(index, color)
 
-            # h, r = self.arc_equations[index]
-            # text_color = color
-            # weight = 'regular'
-            # if text_color == self.graph_colour:
-            #     text_color = self.graph_background_colour
-            #     weight = 'bold'
-            # self.ax.annotate(self.weights[index], (h, r), xytext=(0, 6), rotation=0, textcoords="offset points",
-            #                  fontsize=10,
-            #                  ha='left', va='bottom', color=text_color, weight=weight)
+            # Added weights up on the arcs
+            h, r = self.arc_equations[index]
+            text_color = color
+            weight = 'regular'
+            if text_color == self.graph_colour:
+                text_color = self.graph_background_colour
+                weight = 'bold'
+            self.ax.annotate(self.weights[index], (h, r), xytext=(0, 6), rotation=0, textcoords="offset points",
+                             fontsize=10,
+                             ha='left', va='bottom', color=text_color, weight=weight)
         return self.fig
 
     def click_on_node(self, event):
