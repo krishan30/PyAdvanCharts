@@ -1,5 +1,5 @@
 from body_frames.sankey_modify_frame import SankeyModify
-
+from body_frames.arc_modify_frame import ArcModify
 
 class ModifyFrameFactory():
     
@@ -11,9 +11,5 @@ class ModifyFrameFactory():
             elif frame_no ==1:
                 pass
             elif frame_no ==2:
-                pass
-            
-                #TODO :
-                #return Directed()
+                return ArcModify.get_frame(root)
            
-          

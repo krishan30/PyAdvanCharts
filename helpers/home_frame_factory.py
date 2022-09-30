@@ -1,6 +1,9 @@
 from body_frames.sankey_home_frame import SankeyHome
+from body_frames.arc_home_frame import ArcHome
 
 from body_frames.sankey_modify_frame import SankeyModify
+from body_frames.arc_modify_frame import ArcModify
+
 class HomeFrameFactory():
     
     @staticmethod
@@ -11,9 +14,5 @@ class HomeFrameFactory():
             elif frame_no ==1:
                 return SankeyHome.get_frame(root)
             elif frame_no ==2:
-                return SankeyModify.get_frame(root)
-                pass
-                #TODO :Return Directed chart frame
-                #return Directed()
+                return ArcHome.get_frame(root)
            
-          
