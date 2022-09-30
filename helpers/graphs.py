@@ -7,6 +7,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from charts.arc_diagram import ArcDiagram
 from charts.sankey_chart import SankeyChart
+from charts.chord_chart import ChordChart
 
 
 # function for drawing our sankey chart
@@ -17,6 +18,13 @@ def draw_sankey(root):
     chart = FigureCanvasTkAgg(figure, root)
     return chart
     # chart.get_tk_widget().grid(row=1, column=2,columnspan=2, rowspan=4, pady=2, padx=20, sticky="ns")
+
+#function for drawing  chord chart
+def draw_chord(root):
+    chord_chart=ChordChart("./csv_samples/sankey_sample.csv")
+    figure = chord_chart.generate_graph()
+    chart = FigureCanvasTkAgg(figure, root)
+    return chart
 
 
 # function for drawing arc diagram
