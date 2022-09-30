@@ -1,5 +1,5 @@
 from body_frames.sankey_modify_frame import SankeyModify
-
+from body_frames.chord_modify_frame import ChordModify
 
 class ModifyFrameFactory():
     
@@ -9,7 +9,7 @@ class ModifyFrameFactory():
             if frame_no ==0:
                 return SankeyModify.get_frame(root)
             elif frame_no ==1:
-                pass
+                return ChordModify.get_frame(root)
             elif frame_no ==2:
                 pass
             
