@@ -47,7 +47,7 @@ def  get_tab_frame(root):
     chord_button.grid(row=3, column=0, pady=10, padx=20)
 
     directed_button = customtkinter.CTkButton(master=frame_left,
-                                            text="Force directed graph",
+                                            text="Arc Diagram",
                                             command=select_chart_3)
     directed_button.grid(row=4, column=0, pady=10, padx=20)
 
