@@ -19,7 +19,6 @@ class ArcDiagram:
         self.nodes = None
         self.positions_of_nodes = None
         self.ax = None
-        self.max_position = None
         self.weights = None
         self.targets = None
         self.sources = None
@@ -38,8 +37,8 @@ class ArcDiagram:
         self.lines_with_weights = {}
 
     # Return required information from file
-    def get_information_from_file(self, file_name):
-        df = pd.read_csv(file_name)
+    def get_information_from_file(self):
+        df = pd.read_csv(self.path)
         num_of_rows, num_of_cols = df.shape
         node1, node2, weight = df.columns
         return num_of_rows, df[node1], df[node2], df[weight]
@@ -78,6 +77,10 @@ class ArcDiagram:
         for row in range(num_of_rows):
             self.lines_with_weights[(sources[row], targets[row])] = weights[row]
 
+    # Get lines details with weights
+    def get_lines_details(self):
+        return self.lines_with_weights
+
     # Add or change text related to node
     def add_or_change_node_text(self, node_index, color, weight, nodes):
         node_index = int(node_index)
@@ -99,7 +102,7 @@ class ArcDiagram:
         x1 = self.positions_of_nodes[src]
         x2 = self.positions_of_nodes[des]
         arc = Arc(((x1 + x2) / 2, 0), abs(x2 - x1), abs(x2 - x1), 0, 0, 180, color=color,
-                  lw=self.lines_with_weights[(src, des)] / self.max_position * 2, gid=gid)
+                  lw=self.lines_with_weights[(src, des)] / (self.nodes_count - 1) * 2, gid=gid)
         self.ax.add_patch(arc)
         return (x1 + x2) / 2, abs(x1 - x2) / 2
 
@@ -110,7 +113,7 @@ class ArcDiagram:
         for i in range(len(self.arc_equations)):
             h, r = self.arc_equations[i]
             value = y_co ** 2 + (x_co - h) ** 2
-            line_half_width = 0.01 * (self.nodes_count - 1) * self.weights[i] / self.max_position / 2
+            line_half_width = 0.01 * (self.nodes_count - 1) * self.weights[i] / (self.nodes_count - 1) / 2
             if (r - line_half_width) ** 2 < value < (r + line_half_width) ** 2:
                 return i
         return -1
@@ -201,11 +204,26 @@ class ArcDiagram:
         self.ax.text(0.03, 0.95, textstr, transform=self.ax.transAxes, fontsize=10,
                      verticalalignment='top', bbox=props)
 
+    # Get equations of arc
+    def get_arc_equations(self):
+        return self.arc_equations
+
+    # Set equations of arc
+    def set_arc_equations(self, arc_equations):
+        self.arc_equations = arc_equations
+
+    # Set weights (For testing purpose)
+    def set_weights(self, weights):
+        self.weights = weights
+
+    # Set nodes count (For testing purpose)
+    def set_nodes_count(self, nodes_count):
+        self.nodes_count = nodes_count
+
     def generate_chart(self):
 
-        self.num_of_rows, self.sources, self.targets, self.weights = self.get_information_from_file(self.path)
+        self.num_of_rows, self.sources, self.targets, self.weights = self.get_information_from_file()
         self.nodes, self.positions_of_nodes = self.get_sorted_list_of_nodes_with_positions(self.sources, self.targets)
-        self.max_position = max(self.positions_of_nodes.values())
 
         self.set_lines_weights_for_no_duplicate_data(self.sources, self.targets, self.weights, self.num_of_rows)
         self.nodes_count = len(self.nodes)
