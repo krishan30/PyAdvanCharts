@@ -72,7 +72,7 @@ class ArcHome():
 
         # function for open chart in a new window
         def open_graph():
-            arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv", "purple")
+            arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
             figure = arc_diagram.generate_chart()
 
             window = customtkinter.CTkToplevel(root)

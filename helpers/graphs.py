@@ -21,7 +21,7 @@ def draw_sankey(root):
 
 # function for drawing arc diagram
 def draw_arc(root):
-    arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv", graph_colour="red")
+    arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
     figure = arc_diagram.generate_chart()
 
     chart = FigureCanvasTkAgg(figure, root)

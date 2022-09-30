@@ -59,7 +59,7 @@ class ArcModify():
 
         # function for open chart in a new window
         def open_graph():
-            arc_chart = ArcDiagram("./csv_samples/arc_sample.csv", graph_colour="red")
+            arc_chart = ArcDiagram("./csv_samples/arc_sample.csv")
             figure = arc_chart.generate_chart()
 
             window = customtkinter.CTkToplevel(root)
