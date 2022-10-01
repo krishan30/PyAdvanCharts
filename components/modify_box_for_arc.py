@@ -2,7 +2,7 @@ import customtkinter
 from tkinter import colorchooser
 
 
-def get_arc_modify_box(root, background_colour):
+def get_arc_modify_box(root, background_colour="white"):
     modify_frame = customtkinter.CTkFrame(master=root)
 
     modify_frame.rowconfigure((1, 2, 3, 4, 6), weight=1)

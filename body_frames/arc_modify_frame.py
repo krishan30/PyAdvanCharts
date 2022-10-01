@@ -2,7 +2,7 @@ import tkinter
 import customtkinter
 from tkinter import Y, ttk
 import customtkinter
-from components.modify_box import get_modify_box
+from components.modify_box_for_arc import get_arc_modify_box
 from helpers.graphs import *
 import PySimpleGUI as sg
 import pandas as pd
@@ -125,7 +125,7 @@ class ArcModify():
         """
 
         # modify frame in the bottom
-        modify_frame = get_modify_box(frame_right)
+        modify_frame = get_arc_modify_box(frame_right)
         modify_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=5, padx=20, sticky="nwse")
         modify_frame.grid_propagate(0)
 
