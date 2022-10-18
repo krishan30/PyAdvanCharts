@@ -65,7 +65,7 @@ class ChordModify():
 
         #function for open chart in a new window
         def open_graph():
-            sankeychart=SankeyChart("./csv_samples/sankey_sample.csv")
+            sankeychart=ChordChart("./csv_samples/sankey_sample.csv")
             figure = sankeychart.generate_chart()
 
             window = customtkinter.CTkToplevel(root)

@@ -11,7 +11,7 @@ from helpers.modify_frame_factory import ModifyFrameFactory
 """
 input_frame -> validate_file_frame -> preprocess_frame -> generate_chart_frame
 """
-def get_upload_box(root,master):
+def get_upload_box(root,master,type):
 
     #full frame(parent of all child frames)
     upload_frame=customtkinter.CTkFrame(master=root)
@@ -163,6 +163,6 @@ def get_upload_box(root,master):
         chart_frame.pack(fill=tkinter.BOTH)
         """
         #draw_sankey(chart_frame)
-        master.frame_right=ModifyFrameFactory.get_modify_frame(0,master)
+        master.frame_right=ModifyFrameFactory.get_modify_frame(type,master)
 
     return upload_frame
