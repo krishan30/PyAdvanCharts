@@ -164,9 +164,11 @@ class SankeyChart:
                     # Update bottom edges at each label so next strip starts at the right place
                     self.fromHeights[fromLabel]['bottom'] += self.strips[fromLabel][toLabel]
                     self.toHeights[toLabel]['bottom'] += self.strips[fromLabel][toLabel]
-                   
-                    plt.plot(np.linspace(0, self.xMax, len(ys_b)),ys_b)
-                    plt.plot(np.linspace(0, self.xMax, len(ys_t)),ys_t)
+
+                    plt.fill_between(
+                        np.linspace(0, self.xMax, len(ys_b)), #numeric sequence between 0 and xMax with length of len(ysd)
+                        ys_b, ys_t, alpha=0.65
+                    )
 
     def generate_chart(self):
         self.init_datas()
