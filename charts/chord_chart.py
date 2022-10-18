@@ -250,7 +250,7 @@ class ChordChart:
 
         path = Path(vertices, path_instructions)
         self.__patch = patches.PathPatch(path, facecolor=color, alpha=self.__alpha, edgecolor=color,
-                                         lw=ChordChart.LINE_WIDTH,)
+                                         lw=ChordChart.LINE_WIDTH, )
 
         self.__ax.add_patch(self.__patch)
 
@@ -645,14 +645,6 @@ class ChordChart:
 
         return matrix_ids
 
-    """
-    
-    :parameter
-        num_nodes-number of arcs in the chord diagram
-    :return
-        list with indices for order of the chords within arcs(matrix)    
-    """
-
     @classmethod
     def __get_normed_line(cls, matrix, i, x, start, end):
         return (matrix[i, :] / x[i]) * (end - start)
@@ -713,4 +705,3 @@ class ChordChart:
                               origin='lower', extent=[-1, 1, -1, 1], alpha=self.__alpha)
 
         im.set_clip_path(mask)
-
