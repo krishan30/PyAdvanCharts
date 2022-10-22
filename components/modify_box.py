@@ -2,6 +2,14 @@ import customtkinter
 import tkinter
 from tkinter import colorchooser
 
+
+def get_chart_home(frame):
+    pass
+    #frame.destroy()
+    #ChordHome.get_frame(frame.master)
+
+
+
 def get_modify_box(root):
     modify_frame=customtkinter.CTkFrame(master=root)
 
@@ -219,7 +227,7 @@ def get_modify_box(root):
     #regenerate graph button
     regenerate_graph_btn = customtkinter.CTkButton(master=modify_frame,
                                             text="Apply Changes",
-                                            command=get_color
+                                            command=lambda : get_chart_home(modify_frame)
                                 )
     regenerate_graph_btn.grid(row=10, column=1,columnspan=2, pady=10,padx=10)
 

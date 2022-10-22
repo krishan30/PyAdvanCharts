@@ -10,7 +10,8 @@ import pandas as pd
 from components.upload_box import get_upload_box
 
 
-class ChordHome():
+
+class ChordHome:
 
     @staticmethod
     def get_frame(root):
