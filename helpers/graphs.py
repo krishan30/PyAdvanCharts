@@ -28,8 +28,7 @@ def draw_chord(root):
 
 
 # function for drawing arc diagram
-def draw_arc(root):
-    arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
+def draw_arc_diag(root, arc_diagram):
     figure = arc_diagram.generate_chart()
 
     chart = FigureCanvasTkAgg(figure, root)
