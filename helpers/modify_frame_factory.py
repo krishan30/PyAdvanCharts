@@ -1,11 +1,11 @@
 from body_frames.sankey_modify_frame import SankeyModify
-
+from body_frames.chord_modify_frame import ChordModify
 from body_frames.arc_modify_frame import ArcModify
 from charts.arc_diagram import ArcDiagram
 
 
-class ModifyFrameFactory():
-    
+class ModifyFrameFactory:
+
     @staticmethod
     def get_modify_frame(frame_no,root):
         
@@ -15,4 +15,3 @@ class ModifyFrameFactory():
                 return ChordModify.get_frame(root)
             elif frame_no ==2:
                 return ArcModify.get_frame(root, ArcDiagram("./csv_samples/arc_sample.csv"))
-           

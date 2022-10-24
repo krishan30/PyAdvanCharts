@@ -2,7 +2,7 @@ import tkinter
 import customtkinter
 from tkinter import Y, ttk
 import customtkinter
-from components.modify_box import get_modify_box
+from components.modify_box_for_arc import get_arc_modify_box
 from helpers.graphs import *
 import PySimpleGUI as sg
 import pandas as pd

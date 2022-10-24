@@ -10,7 +10,8 @@ import pandas as pd
 from components.upload_box import get_upload_box
 
 
-class ChordHome():
+
+class ChordHome:
 
     @staticmethod
     def get_frame(root):
@@ -135,7 +136,7 @@ class ChordHome():
         text_frame.grid(row=6, column=0, columnspan=4, pady=20, padx=20, sticky="ew")
 
         # upload frame in the bottom
-        upload_frame = get_upload_box(frame_right, root)
+        upload_frame = get_upload_box(frame_right, root,1)
         upload_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=100, padx=100, sticky="nswe")
         upload_frame.grid_propagate(0)
 

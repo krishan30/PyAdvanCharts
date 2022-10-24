@@ -6,6 +6,7 @@ from tkinter import colorchooser
 from helpers.graphs import draw_arc_diag
 
 
+
 def get_arc_modify_box(root, root_parent, arc_diagram):
     modify_frame = customtkinter.CTkFrame(master=root)
 

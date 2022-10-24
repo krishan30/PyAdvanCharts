@@ -1,11 +1,7 @@
 from body_frames.sankey_home_frame import SankeyHome
+from body_frames.chord_home_frame import ChordHome
 from body_frames.arc_home_frame import ArcHome
 from charts.arc_diagram import ArcDiagram
-
-
-
-from body_frames.sankey_modify_frame import SankeyModify
-from body_frames.arc_modify_frame import ArcModify
 
 
 class HomeFrameFactory():
@@ -19,5 +15,3 @@ class HomeFrameFactory():
                 return ChordHome.get_frame(root)
             elif frame_no ==2:
                 return ArcHome.get_frame(root, ArcDiagram("./csv_samples/arc_sample.csv"))
-
-           
