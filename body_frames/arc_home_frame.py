@@ -15,7 +15,10 @@ from components.upload_box import get_upload_box
 class ArcHome():
 
     @staticmethod
-    def get_frame(root):
+    def get_frame(root, arc_diagram):
+
+        # arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
+
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -64,7 +67,7 @@ class ArcHome():
         # ==================Play with different graphs========================
 
         # draw_simple_matplotlib_chart(frame_right)
-        draw_arc(frame_right).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2, padx=20,
+        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2, padx=20,
                                                       sticky="ns")
 
         # draw_simple_seaborn_chart(frame_right)
@@ -72,7 +75,7 @@ class ArcHome():
 
         # function for open chart in a new window
         def open_graph():
-            arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
+            # arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
             figure = arc_diagram.generate_chart()
 
             window = customtkinter.CTkToplevel(root)

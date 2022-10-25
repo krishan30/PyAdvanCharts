@@ -8,10 +8,13 @@ import PySimpleGUI as sg
 import pandas as pd
 
 
-class ArcModify():
+class ArcModify:
 
     @staticmethod
-    def get_frame(root):
+    def get_frame(root, arc_diagram):
+
+        arc_diagram = arc_diagram
+
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -54,13 +57,12 @@ class ArcModify():
                                                    )
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
 
-        draw_arc(frame_right).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
+        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
                                                    sticky="ns")
 
         # function for open chart in a new window
         def open_graph():
-            arc_chart = ArcDiagram("./csv_samples/arc_sample.csv")
-            figure = arc_chart.generate_chart()
+            figure = arc_diagram.generate_chart()
 
             window = customtkinter.CTkToplevel(root)
             window.geometry("800x500")
@@ -125,7 +127,7 @@ class ArcModify():
         """
 
         # modify frame in the bottom
-        modify_frame = get_arc_modify_box(frame_right)
+        modify_frame = get_arc_modify_box(frame_right, root, arc_diagram)
         modify_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=5, padx=20, sticky="nwse")
         modify_frame.grid_propagate(0)
 
