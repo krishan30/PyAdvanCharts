@@ -21,6 +21,7 @@ def get_upload_box(root, master, type):
     def upload(frame):
 
         # give location of selected file
+        global file
         file = filedialog.askopenfilename(initialdir='.\\', title='Insert File',
                                           filetypes=[("CSV files", ".csv"), ("Excel files", ".xlsx"),
                                                      ("Excel other file type", ".xls")], parent=root)
@@ -107,7 +108,7 @@ def get_upload_box(root, master, type):
         chart_frame.pack(fill=tkinter.BOTH)
         """
         # draw_sankey(chart_frame)
-        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master)
+        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master,file)
 
     return upload_frame
 
