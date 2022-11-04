@@ -305,27 +305,7 @@ class ChordChart:
 
         self.__ax.add_patch(self.__patch)
 
-    """def update_annot(self,ind):
 
-        text = "HI"
-        self.__patch.set_text(text)
-        self.__patch.get_bbox_patch().set_facecolor("white")
-        self.__patch.get_bbox_patch().set_alpha(0.4)
-
-    def hover(self,event):
-        vis = annot.get_visible()
-        if event.inaxes == ax:
-            cont, ind = self.__patch.contains_point(ChordChart.__polar_to_xy_convertor(inner_radius, inter_degree_1))
-            if cont:
-                update_annot(ind)
-                annot.set_visible(True)
-                fig.canvas.draw_idle()
-            else:
-                if vis:
-                    annot.set_visible(False)
-                    fig.canvas.draw_idle()
-
-        fig.canvas.mpl_connect("motion_notify_event", hover)"""
 
     """
     To draw a chord in the chart that going from one arc to other connecting arc
@@ -416,7 +396,8 @@ class ChordChart:
             min_angle = d_theta_2
 
         # creating the patch
-        patch = patches.PathPatch(path, facecolor="none", edgecolor="none", lw=ChordChart.LINE_WIDTH)
+        #patch = patches.PathPatch(path, facecolor="none", edgecolor="none", lw=ChordChart.LINE_WIDTH)
+        patch = patches.PathPatch(path, facecolor=color_start, alpha=self.__alpha,edgecolor=color_start, lw=ChordChart.LINE_WIDTH)
         self.__ax.add_patch(patch)
 
         # creating the grid
