@@ -3,6 +3,8 @@ from tkinter.messagebox import IGNORE
 from PIL import Image, ImageTk
 import customtkinter
 import tkinter
+from charts.arc_diagram import ArcDiagram
+from charts.sankey_chart import SankeyChart
 from helpers.InputManager import InputManager
 from helpers.DataPreprocesser import DataPreprocessor
 from tkinter import messagebox
@@ -22,6 +24,7 @@ def get_upload_box(root, master, type):
     def upload(frame):
 
         # give location of selected file
+        global file
         file = filedialog.askopenfilename(initialdir='.\\', title='Insert File',
                                           filetypes=[("CSV files", ".csv"), ("Excel files", ".xlsx"),
                                                      ("Excel other file type", ".xls")], parent=root)
@@ -104,11 +107,11 @@ def get_upload_box(root, master, type):
     def generate_chart(data_frame):
         chart_diagram = None
         if type == 0:
-            pass
+            chart_diagram=SankeyChart(file)
         elif type == 1:
             chart_diagram = ChordChart(data_frame=data_frame)
         elif type == 2:
-            pass
+            chart_diagram=ArcDiagram(file)
         master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram)
 
     return upload_frame
