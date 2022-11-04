@@ -1,8 +1,8 @@
 import tkinter
 import customtkinter
-from tkinter import Y, ttk
+from tkinter import filedialog,Y, ttk
 import customtkinter
-from components.modify_box import get_modify_box
+from components.modify_box_for_sankey import get_sankey_modify_box
 from helpers.graphs import *
 import PySimpleGUI as sg
 import pandas as pd
@@ -11,9 +11,9 @@ import pandas as pd
 class SankeyModify():
 
     @staticmethod   
-    def  get_frame(root):
+    def  get_frame(root,sankeychart):
 
-        
+        sankeychart = sankeychart
         #set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -60,12 +60,12 @@ class SankeyModify():
                                     )
         create_chart_btn.grid(row=0, column=2,columnspan=2, pady=10,padx=10)
 
-        draw_sankey(frame_right).get_tk_widget().grid(row=1, column=0,columnspan=4, rowspan=4, pady=2, padx=20, sticky="ns")
+        draw_sankey(frame_right,sankeychart).get_tk_widget().grid(row=1, column=0,columnspan=4, rowspan=4, pady=2, padx=20, sticky="ns")
      
         
         #function for open chart in a new window
         def open_graph():
-            sankeychart=SankeyChart("./csv_samples/sankey_sample.csv")
+            #sankeychart=SankeyChart(file)
             figure = sankeychart.generate_chart()
 
             window = customtkinter.CTkToplevel(root)
@@ -77,38 +77,13 @@ class SankeyModify():
 
         #function for download the sample csv file
         def download_sample():
-            location=sg.popup_get_file("Choose file location",
-                    title = "Save sample file as",
-                    default_path = "",
-                    default_extension = ".csv",
-                    save_as = True,
-                    multiple_files = False,
-                    file_types = (('ALL Files', '*.* *'),),
-                    no_window = False,
-                    size = (None, None),
-                    button_color = None,
-                    background_color = None,
-                    text_color = None,
-                    icon = None,
-                    font = None,
-                    no_titlebar = False,
-                    grab_anywhere = False,
-                    keep_on_top = None,
-                    location = (None, None),
-                    relative_location = (None, None),
-                    initial_folder = None,
-                    image = None,
-                    files_delimiter = ";",
-                    modal = True,
-                    history = False,
-                    show_hidden = True,
-                    history_setting_filename = None)
+            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
+                                          filetypes=[("PNG", ".png")], parent=root)
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
- 
-            dataFrame = pd.DataFrame({'from': df['from'], 'to':df['to'], 'weight': df['weight']
-                              }, index=range(len(df['from'])))
-            dataFrame.to_csv(location)
+
+            print(location.name)
+            print(type(location.name))
+            sankeychart.save_image(f"{location.name}.png")
 
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                 text="Download",
@@ -132,7 +107,7 @@ class SankeyModify():
         """
         
         #modify frame in the bottom
-        modify_frame=get_modify_box(frame_right)
+        modify_frame=get_sankey_modify_box(frame_right,root,sankeychart)
         modify_frame.grid(row=7, column=0, rowspan=4,columnspan=4,pady=5,padx=20,sticky="nwse")
         modify_frame.grid_propagate(0)
      

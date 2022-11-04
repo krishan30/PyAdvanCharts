@@ -11,8 +11,8 @@ from charts.chord_chart import ChordChart
 
 
 # function for drawing our sankey chart
-def draw_sankey(root):
-    sankeychart = SankeyChart("./csv_samples/sankey_sample.csv")
+def draw_sankey(root,sankeychart):
+    #sankeychart = SankeyChart(file)
     figure = sankeychart.generate_chart()
 
     chart = FigureCanvasTkAgg(figure, root)
