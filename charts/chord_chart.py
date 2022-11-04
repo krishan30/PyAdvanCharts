@@ -9,7 +9,6 @@ from matplotlib.colors import is_color_like
 import pandas as pd
 import networkx as nx
 from scipy.ndimage import gaussian_filter
-import mplcursors as mlp
 import numpy as np
 
 """
@@ -20,8 +19,9 @@ import numpy as np
 class ChordChart:
     LINE_WIDTH = 0.3  # Line Width (Class Variable)
 
-    def __init__(self, path):
-        data_frame = pd.read_csv(path)
+    def __init__(self, path=None, data_frame=None):
+        if data_frame is None:
+            data_frame = pd.read_csv(path)
         column_names = list(data_frame.columns)
         network_graph = nx.from_pandas_edgelist(data_frame, column_names[0], column_names[1],
                                                 column_names[2])  # create networkx graph from dataframe
@@ -29,11 +29,16 @@ class ChordChart:
                                                   weight=column_names[2])  # create adjacency matrix from graph
         self.__node_names = list(adjacency_matrix.columns)
         self.__flux_matrix = adjacency_matrix.to_numpy()
-        self.__title = None
+        self.__title = "Chord Chart"
         self.__gap = 0.03
-        self.__font_colour = "white"
-        self.__fontsize = 7.5
+        self.__font_colour = "Black"
+        self.__font_size = 7.5
+        self.__font_type = 'sans-serif'
         self.__attribute_colour_map = 'viridis'
+        self.__background_colour = "white"
+        self.__title_font_colour = "Black"
+        self.__title_font_type = 'sans-serif'
+        self.__title_font_size = 20
         self.__alpha = 0.7
         self.__radius = 1.
         self.__width = 0.1
@@ -41,11 +46,7 @@ class ChordChart:
         self.__chord_width = 0.7
         self.__start = 0
         self.__extent = 360
-        self.__figure, self.__ax = plt.subplots()
-        self.__annot = self.__ax.annotate("", xy=(0, 0), xytext=(20, 20), textcoords="offset points",
-                                          bbox=dict(boxstyle="round", fc="w"),
-                                          arrowprops=dict(arrowstyle="->"))
-        self.__annot.set_visible(False)
+        self.__figure, self.__ax = None, None
         self.__patch = None
 
     """
@@ -54,26 +55,76 @@ class ChordChart:
         colour_map_index:The relevant index of the colour map
     """
 
-    def change_attribute_colour_map(self, colour_map_index):
+    def change_attribute_colour_map(self, colour_map):
         colour_maps = ['viridis', 'plasma', 'inferno', 'magma', 'cividis']
-        if colour_map_index >= len(colour_maps) or colour_map_index < 0:
+        if colour_map not in colour_maps:
             return None
         else:
-            self.__attribute_colour_map = colour_maps[colour_map_index]
-            return colour_maps[colour_map_index]
+            self.__attribute_colour_map = colour_map
+            return colour_map
+
+    def get_attribute_colour_map(self):
+        return self.__attribute_colour_map
+
+    def get_title(self):
+        return self.__title
+
+    def change_background_colour(self, background_colour):
+        if not (is_color_like(background_colour)):
+            return None
+        else:
+            self.__background_colour = background_colour
+            return background_colour
+
+    def change_title_font_type(self, new_font_type):
+        if new_font_type:
+            self.__title_font_type = new_font_type
+            return True
+        else:
+            return False
+
+    def get_title_font_type(self):
+        return self.__title_font_type
+
+    def change_title_font_size(self, new_font_size):
+        if 5 <= int(new_font_size) <= 40:
+            self.__title_font_size = int(new_font_size)
+            return True
+        else:
+            return False
+
+    def get_title_font_size(self):
+        return self.__title_font_size
+
+    def change_title_font_colour(self, new_font_colour):
+        if is_color_like(new_font_colour):
+            self.__title_font_colour = new_font_colour
+            return True
+        else:
+            return False
+
+    def change_font_type(self, new_font_type):
+        if new_font_type:
+            self.__font_type = new_font_type
+            return True
+        else:
+            return False
+
+    def get_font_type(self):
+        return self.__font_type
 
     """
-    TO change the title of the chart
+    To change the title of the chart
     
     :parameters
-    new_tittle-new tittle for the chord chart
+    new_tittle-new title for the chord chart
     """
 
-    def change_tittle(self, new_tittle):
-        if not new_tittle:
+    def change_title(self, new_title):
+        if not new_title:
             return False
         else:
-            self.__title = new_tittle
+            self.__title = new_title
             return True
 
     """
@@ -417,7 +468,8 @@ class ChordChart:
     """
 
     def generate_graph(self):
-
+        self.__figure, self.__ax = plt.subplots()
+        self.__patch = None
         flux_matrix = np.array(self.__flux_matrix, copy=True)
         num_nodes = flux_matrix.shape[0]
         rotate_names = [True] * num_nodes
@@ -477,7 +529,7 @@ class ChordChart:
                                      color_start=chord_color, color_end=colour_end)
 
         properties = {
-            "fontsize": self.__fontsize,
+            "fontsize": self.__font_size,
             "ha": "center",
             "va": "center",
             "rotation_mode": "anchor"
@@ -503,7 +555,8 @@ class ChordChart:
             else:
                 pp["va"] = "bottom"
 
-            self.__ax.text(position[0], position[1], name, rotation=position[2] + rotate, **pp)
+            self.__ax.text(position[0], position[1], name, rotation=position[2] + rotate, fontname=self.__font_type,
+                           **pp)
 
         # axis configuration
         self.__ax.set_xlim(-1.1, 1.1)
@@ -512,10 +565,12 @@ class ChordChart:
         self.__ax.set_aspect(1)
         self.__ax.axis('off')
         # adding the title
-        plt.title(self.__title, color="white", pad=20)
+        plt.title(self.__title, color=self.__title_font_colour, pad=self.__title_font_size * 1.5,
+                  fontsize=self.__title_font_size,
+                  fontweight='bold', fontname=self.__title_font_type)
         plt.tight_layout()
         # adding the background colour
-        self.__figure.patch.set_facecolor("#262626")
+        self.__figure.patch.set_facecolor(self.__background_colour)
 
         return self.__figure
 

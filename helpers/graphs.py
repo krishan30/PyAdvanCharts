@@ -19,10 +19,10 @@ def draw_sankey(root):
     return chart
     # chart.get_tk_widget().grid(row=1, column=2,columnspan=2, rowspan=4, pady=2, padx=20, sticky="ns")
 
-#function for drawing  chord chart
-def draw_chord(root):
-    chord_chart=ChordChart("./csv_samples/sankey_sample.csv")
-    figure = chord_chart.generate_graph()
+
+# function for drawing  chord chart
+def draw_chord(root, chord_diagram):
+    figure = chord_diagram.generate_graph()
     chart = FigureCanvasTkAgg(figure, root)
     return chart
 

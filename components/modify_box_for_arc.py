@@ -1,10 +1,6 @@
-import tkinter
-
-import customtkinter
 from tkinter import colorchooser
 
-from helpers.graphs import draw_arc_diag
-
+import customtkinter
 
 
 def get_arc_modify_box(root, root_parent, arc_diagram):

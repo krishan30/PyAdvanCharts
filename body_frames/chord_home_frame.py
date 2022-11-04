@@ -10,11 +10,10 @@ import pandas as pd
 from components.upload_box import get_upload_box
 
 
-
 class ChordHome:
 
     @staticmethod
-    def get_frame(root):
+    def get_frame(root, chord_diagram):
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -63,16 +62,16 @@ class ChordHome:
         # ==================Play with different graphs========================
 
         # draw_simple_matplotlib_chart(frame_right)
-        draw_chord(frame_right).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2, padx=20,
-                                                     sticky="ns")
+        draw_chord(frame_right, chord_diagram).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2,
+                                                                    padx=20,
+                                                                    sticky="ns")
 
         # draw_simple_seaborn_chart(frame_right)
         # draw_iris_data(frame_right)
 
         # function for open chart in a new window
         def open_graph():
-            chord_chart = ChordChart("./csv_samples/sankey_sample.csv")
-            figure = chord_chart.generate_graph()
+            figure = chord_diagram.generate_graph()
 
             window = customtkinter.CTkToplevel(root)
             window.geometry("800x500")
@@ -136,7 +135,7 @@ class ChordHome:
         text_frame.grid(row=6, column=0, columnspan=4, pady=20, padx=20, sticky="ew")
 
         # upload frame in the bottom
-        upload_frame = get_upload_box(frame_right, root,1)
+        upload_frame = get_upload_box(frame_right, root, 1)
         upload_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=100, padx=100, sticky="nswe")
         upload_frame.grid_propagate(0)
 

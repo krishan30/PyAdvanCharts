@@ -7,6 +7,7 @@ from helpers.InputManager import InputManager
 from helpers.DataPreprocesser import DataPreprocessor
 from tkinter import messagebox
 from helpers.modify_frame_factory import ModifyFrameFactory
+from charts.chord_chart import ChordChart
 
 """
 input_frame -> validate_file_frame -> preprocess_frame -> generate_chart_frame
@@ -45,7 +46,7 @@ def get_upload_box(root, master, type):
 
                                                   )
         upload_guide_txt.pack(pady=100, padx=100)
-        #upload_icon = ImageTk.PhotoImage(Image.open("C:/Users/ACER/PyAdvanCharts/components/upload_1.png").resize((20,20), Image.ANTIALIAS))
+        # upload_icon = ImageTk.PhotoImage(Image.open("C:/Users/ACER/PyAdvanCharts/components/upload_1.png").resize((20,20), Image.ANTIALIAS))
         upload_btn = customtkinter.CTkButton(master=file_input_frame,
                                              text="Upload",
                                              command=lambda: upload(file_input_frame)
@@ -65,11 +66,11 @@ def get_upload_box(root, master, type):
             pass
 
     # navigate to next frame from validate_file_frame
-    def next_valid(frame):
+    def next_valid(frame, data_frame):
         value = messagebox.askyesno("Confirm", "Do you wish to proceed?", parent=root)
         if value:
             frame.destroy()
-            generate_chart("Chord")
+            generate_chart(data_frame)
         else:
             frame.destroy()
             create_input_frame()
@@ -91,7 +92,7 @@ def get_upload_box(root, master, type):
 
         next_valid_btn = customtkinter.CTkButton(master=validate_file_frame,
                                                  text="Proceed",
-                                                 command=lambda: next_valid(validate_file_frame)
+                                                 command=lambda: next_valid(validate_file_frame, data_frame)
                                                  )
         next_valid_btn.pack(pady=20, padx=10)
         cancel_btn = customtkinter.CTkButton(master=validate_file_frame,
@@ -100,14 +101,15 @@ def get_upload_box(root, master, type):
                                              )
         cancel_btn.pack(pady=20, padx=10)
 
-    def generate_chart(chart_Name):
-        """
-        frame.destroy()
-        chart_frame=customtkinter.CTkFrame(master=upload_frame,bg_color="#3D3B3B",fg_color="#524E4E",border_color="#D9D9D9")
-        chart_frame.pack(fill=tkinter.BOTH)
-        """
-        # draw_sankey(chart_frame)
-        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master)
+    def generate_chart(data_frame):
+        chart_diagram = None
+        if type == 0:
+            pass
+        elif type == 1:
+            chart_diagram = ChordChart(data_frame=data_frame)
+        elif type == 2:
+            pass
+        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram)
 
     return upload_frame
 
