@@ -50,7 +50,7 @@ class SankeyModify():
 
         #function for navigate to bottom part(upload box)
         def go_bottom():
-            my_canvas.yview_moveto('0.45')
+            my_canvas.yview_moveto('0.40')
            
         
 
@@ -91,13 +91,13 @@ class SankeyModify():
                                                
                                                 
                                                 )  # font name and size in px
-        download_btn.grid(row=5, column=1,rowspan=1,columnspan=2, pady=10,padx=10)
+        download_btn.grid(row=5, column=1,rowspan=1,columnspan=2, pady=10,padx=120, sticky="w")
 
         open_graph_btn = customtkinter.CTkButton(master=frame_right,
                                                 text="Open",
                                                 command=open_graph
                                     )
-        open_graph_btn.grid(row=6, column=1,columnspan=2, pady=10,padx=10)
+        open_graph_btn.grid(row=5, column=1,columnspan=2, pady=10,padx=120, sticky="e")
 
         """
         #upload frame in the bottom
@@ -108,7 +108,7 @@ class SankeyModify():
         
         #modify frame in the bottom
         modify_frame=get_sankey_modify_box(frame_right,root,sankeychart)
-        modify_frame.grid(row=7, column=0, rowspan=4,columnspan=4,pady=5,padx=20,sticky="nwse")
+        modify_frame.grid(row=6, column=0, rowspan=4,columnspan=4,pady=5,padx=20,sticky="nwse")
         modify_frame.grid_propagate(0)
      
         return main_frame
