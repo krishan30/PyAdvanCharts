@@ -1,5 +1,3 @@
-import matplotlib
-
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 import pandas as pd
@@ -496,7 +494,7 @@ class ArcDiagram:
         self.ax = self.fig.add_subplot(1, 1, 1)
         self.ax.set_ylim(-5, self.nodes_count / 2 + 1)
         self.ax.set_xlim(-1, self.nodes_count + 1)
-        self.fig.canvas.set_window_title('Arc diagram')
+        #self.fig.canvas.set_window_title('Arc diagram')
         self.ax.axis('off')
         self.ax.title.set_text(self.title)
         self.fig.set_facecolor(self.background_colour)
