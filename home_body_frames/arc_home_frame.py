@@ -1,6 +1,6 @@
 import tkinter
 import customtkinter
-from tkinter import filedialog,Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import tkinter.messagebox
 import customtkinter
 import components.custom_table as custom_table
@@ -92,7 +92,11 @@ class ArcHome():
  
             dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
                               }, index=range(len(df['Source'])))
-            dataFrame.to_csv(f"{location.name}.csv")
+            if location is not None:
+                dataFrame.to_csv(f"{location.name}.csv")
+                messagebox.showinfo("CSV File", "Save Completed", parent=root)
+            else:
+                pass
 
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                text="Download",

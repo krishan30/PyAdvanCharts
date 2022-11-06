@@ -1,5 +1,5 @@
 import tkinter
-from tkinter import filedialog,Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import customtkinter
 from modify_box_frames.chord_modify_box import get_chord_modify_box
 from helpers.graphs import *
@@ -52,8 +52,9 @@ class ChordModify:
                                                    )
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
 
-        draw_chord(frame_right,chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
-                                                     sticky="ns")
+        draw_chord(frame_right, chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
+                                                                    padx=20,
+                                                                    sticky="ns")
 
         # function for open chart in a new window
         def open_graph():
@@ -66,30 +67,28 @@ class ChordModify:
             chart = FigureCanvasTkAgg(figure, window)
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
-        #function for download the sample csv file
-        def download_sample():
-            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
-                                          filetypes=[("CSV", ".csv")], parent=root)
+        # function for download the sample csv file
+        def save_chart():
+            location = filedialog.asksaveasfile(initialdir='.\\', title='Save Chart',
+                                                filetypes=[("PNG", ".png")], parent=root)
+            if location is not None:
+                chord_diagram.save_image(f"{location.name}.png")
+                messagebox.showinfo("Chart Save", "Save Completed",parent=root)
+            else:
+                pass
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
- 
-            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
-                              }, index=range(len(df['Source'])))
-            dataFrame.to_csv(f"{location.name}.csv")
+        save_chart_btn = customtkinter.CTkButton(master=frame_right,
+                                                 text="Save Chart",
+                                                 command=save_chart
 
-        download_btn = customtkinter.CTkButton(master=frame_right,
-                                               text="Save Chart",
-                                               command=download_sample
+                                                 )  # font name and size in px
+        save_chart_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
 
-                                               )  # font name and size in px
-        download_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
-
-        open_graph_btn= customtkinter.CTkButton(master=frame_right,
-                                                    text="Full Screen View",
-                                                    command=open_graph
-                                                    )
+        open_graph_btn = customtkinter.CTkButton(master=frame_right,
+                                                 text="Full Screen View",
+                                                 command=open_graph
+                                                 )
         open_graph_btn.grid(row=0, column=3, columnspan=2, pady=10, padx=10)
-
 
         """
         #upload frame in the bottom

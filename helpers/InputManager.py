@@ -18,8 +18,9 @@ class InputManager:
                 if data_frame.empty:
                     ErrorHandler.handle_invalid_errors("Invalid", "No entries", parent_window)
                     return "No entries"
-                elif data_frame.shape[1] != InputManager.COLUMN_COUNT:
-                    ErrorHandler.handle_invalid_errors("Invalid File Format", "Column are not matched", parent_window)
+                elif data_frame.shape[
+                    1] != InputManager.COLUMN_COUNT or 'Weight' not in data_frame.dtypes or 'Target' not in data_frame.dtypes or 'Source' not in data_frame.dtypes:
+                    ErrorHandler.handle_invalid_errors("Invalid File Format", "Columns are not matched", parent_window)
                     return "Column are not matched"
                 else:
                     return data_frame
@@ -37,7 +38,7 @@ class InputManager:
                     ErrorHandler.handle_invalid_errors("Invalid", "No entries", parent_window)
                     return "NO entries"
                 elif data_frame.shape[1] != InputManager.COLUMN_COUNT:
-                    ErrorHandler.handle_invalid_errors("Invalid File Format", "Column are not matched", parent_window)
+                    ErrorHandler.handle_invalid_errors("Invalid File Format", "Columns are not matched", parent_window)
                     return "Column are not matched"
                 else:
                     return data_frame
