@@ -49,7 +49,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram):
     # Set font size
     def set_font_size(value):
         nonlocal graph_font_size
-        print(type(value))
+        #print(type(value))
         if value is not None:
             graph_font_size = int(value)
 
@@ -57,11 +57,11 @@ def get_arc_modify_box(root, root_parent, arc_diagram):
     def set_font_type(choice):
         nonlocal graph_font
         graph_font = choice
-        print("Pre-test", graph_font)
+        #print("Pre-test", graph_font)
 
     # Regenerate graph according to the new changes
     def regenerate_graph():
-        from body_frames.arc_modify_frame import ArcModify
+        from modify_body_frames.arc_modify_frame import ArcModify
         arc_diagram.set_background_colour(background_colour)
         arc_diagram.set_graph_colour(arc_colour)
         arc_diagram.set_node_selected_arc_colour(node_selected_arc_colour)

@@ -37,14 +37,14 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     # Set label font size
     def set_label_font_size(value):
         nonlocal font_size
-        print(value)
+        #print(value)
         if value is not None:
             font_size = int(value)
 
     # Set weight font size
     def set_weight_font_size(value):
         nonlocal weight_font_size
-        print(value)
+        #print(value)
         if value is not None:
             weight_font_size = int(value)
 
@@ -115,34 +115,34 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     #set alpha value for block
     def set_block_alpha(value):
         nonlocal block_alpha
-        print(value)
+        #print(value)
         if value is not None:
             block_alpha = value
 
     #set alpha value for strip
     def set_strip_alpha(value):
         nonlocal strip_alpha
-        print(value)
+        #print(value)
         if value is not None:
             strip_alpha = value
 
     #set vertical margin for block
     def set_block_v_m(value):
         nonlocal block_v_m
-        print(value)
+        #print(value)
         if value is not None:
             block_v_m = value/10
 
     #set horizontal margin for block
     def set_block_h_m(value):
         nonlocal block_h_m
-        print(value)
+        #print(value)
         if value is not None:
             block_h_m = value
             
     # Regenerate graph according to the new changes
     def regenerate_graph():
-        from body_frames.sankey_modify_frame import SankeyModify
+        from modify_body_frames.sankey_modify_frame import SankeyModify
         sankey_diagram.set_label_font_size(font_size)
         sankey_diagram.set_weight_font_size(weight_font_size)
         sankey_diagram.set_bg_color(background_colour)
