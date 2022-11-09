@@ -11,7 +11,7 @@ import pandas as pd
 class SankeyModify():
 
     @staticmethod   
-    def  get_frame(root,sankeychart):
+    def  get_frame(root, sankeychart, right_frame_width):
 
         sankeychart = sankeychart
         #set home frame grid
@@ -32,7 +32,7 @@ class SankeyModify():
         my_canvas.bind('<Configure>', lambda e : my_canvas.configure(scrollregion=my_canvas.bbox("all")))
         
         #create content frame and put it inside canvas
-        frame_right = customtkinter.CTkFrame(master=my_canvas,width=1300,height=1500)
+        frame_right = customtkinter.CTkFrame(master=my_canvas, width=right_frame_width, height=1500)
         frame_right.grid_propagate(0)   #give static fixed size to frame_right
         my_canvas.create_window((0,0),window=frame_right,anchor="nw")
 
