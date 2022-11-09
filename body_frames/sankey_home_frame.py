@@ -13,7 +13,7 @@ from components.upload_box import get_upload_box
 class SankeyHome():
 
     @staticmethod   
-    def  get_frame(root):
+    def  get_frame(root, right_frame_width):
 
         sankeychart=SankeyChart("./csv_samples/sankey_sample.csv")
         #set home frame grid
@@ -34,7 +34,7 @@ class SankeyHome():
         my_canvas.bind('<Configure>', lambda e : my_canvas.configure(scrollregion=my_canvas.bbox("all")))
         
         #create content frame and put it inside canvas
-        frame_right = customtkinter.CTkFrame(master=my_canvas,width=1300,height=1500)
+        frame_right = customtkinter.CTkFrame(master=my_canvas,width=right_frame_width, height=1500)
         frame_right.grid_propagate(0)   #give static fixed size to frame_right
         my_canvas.create_window((0,0),window=frame_right,anchor="nw")
 
@@ -115,7 +115,7 @@ class SankeyHome():
         text_frame.grid(row=6, column=0,columnspan=4, pady=20,padx=20,sticky="ew")
 
         #upload frame in the bottom
-        upload_frame=get_upload_box(frame_right,root,0)
+        upload_frame=get_upload_box(frame_right, root, 0, right_frame_width)
         upload_frame.grid(row=7, column=0, rowspan=4,columnspan=4,pady=100,padx=100, sticky="nswe")
         upload_frame.grid_propagate(0)
 
