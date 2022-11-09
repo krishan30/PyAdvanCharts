@@ -1,5 +1,3 @@
-import matplotlib
-
 import matplotlib.pyplot as plt
 from matplotlib.patches import Arc
 import pandas as pd
@@ -8,14 +6,8 @@ import mplcursors
 
 
 class ArcDiagram:
-    # Properties in the graph window
 
-    font_size = 10
-    # font_type = "sans-serif"
-    font_type = "sans-serif"
-
-    def __init__(self, path, title="", graph_colour="blue", background_colour="white",
-                 node_selected_arc_colour="red", selected_line_colour="green"):
+    def __init__(self, path=None, data_frame=None):
         self.nodes_count = None
         self.nodes = None
         self.positions_of_nodes = None
@@ -26,23 +18,36 @@ class ArcDiagram:
         self.num_of_rows = None
         self.fig = None
         self.path = path
-        self.graph_colour = graph_colour
-        self.title = title
-        self.background_colour = background_colour
-        self.node_selected_arc_colour = node_selected_arc_colour
-        self.selected_line_colour = selected_line_colour
+        self.data_frame = data_frame
+        self.graph_colour = "blue"
+        self.title = "Arc Diagram"
+        self.sub_title = None
+        self.title_font_colour = "blue"
+        self.title_font_type = "serif"
+        self.title_font_size = 20
+        self.background_colour = "white"
+        self.node_selected_arc_colour = "red"
+        self.selected_line_colour = "green"
+        self.font_size = 10
+        self.font_type = "serif"
+        self.line_width_multiplier = 2
+        self.from_weight = None
+        self.to_weight = None
 
-        # previously clicked node details are stored in here
+        # All the parameters required to the equations related to arcs are stored inside this
+        self.arc_equations = None
+
+        # Keeps record of weights for each node pairs used to make arcs
+        self.lines_with_weights = None
+
+        # Keeps the values of width in each arcs inside this list
+        self.lines_width_values = None
+
+        # previously clicked node and arc details are stored in here
         self.previously_selected_node = 0
         self.previously_selected_arc = -1
 
-        # All the parameters required to the equations related to arcs are stored inside this
-        self.arc_equations = []
-
-        # Keeps record of weights for each node pairs used to make arcs
-        self.lines_with_weights = {}
-
-    def get_information_from_file(self):
+    def get_information(self):
         """
         Return the collection of details for selected file for draw
         arc diagram. Returns count of rows for given csv file, from
@@ -51,10 +56,37 @@ class ArcDiagram:
         :return: number of nodes, from nodes list, to nodes list, weight list
         """
 
-        df = pd.read_csv(self.path)
-        num_of_rows, num_of_cols = df.shape
+        self.arc_equations = []
+        self.lines_width_values = []
+        self.lines_with_weights = {}
+        self.sub_title = "( Weight range: "
+
+        self.previously_selected_node = 0
+        self.previously_selected_arc = -1
+
+        if self.path is None:
+            df = self.data_frame
+        else:
+            df = pd.read_csv(self.path)
+
         node1, node2, weight = df.columns
-        return num_of_rows, df[node1], df[node2], df[weight]
+
+        if self.from_weight is None:
+            self.from_weight = min(df[weight])
+            self.sub_title = self.sub_title + "  - "
+        else:
+            self.sub_title = self.sub_title + str(self.from_weight) + " - "
+
+        if self.to_weight is None:
+            self.to_weight = max(df[weight])
+            self.sub_title = self.sub_title + "  )"
+        else:
+            self.sub_title = self.sub_title + str(self.to_weight) + " )"
+
+        filtered_df = df.loc[(df[weight] >= self.from_weight) & (df[weight] <= self.to_weight)].reset_index()
+        num_of_rows, num_of_cols = filtered_df.shape
+
+        return num_of_rows, filtered_df[node1], filtered_df[node2], filtered_df[weight]
 
     def get_nodes_positions(self, nodes_list):
         """
@@ -158,7 +190,7 @@ class ArcDiagram:
                          rotation=90,
                          va='top',
                          fontsize=self.font_size,
-                         family = self.font_type,
+                         family=self.font_type,
                          weight=weight,
                          color=color,
                          ha='left')
@@ -178,8 +210,11 @@ class ArcDiagram:
         x1 = self.positions_of_nodes[src]
         x2 = self.positions_of_nodes[des]
         arc = Arc(((x1 + x2) / 2, 0), abs(x2 - x1), abs(x2 - x1), 0, 0, 180, color=color,
-                  lw=self.lines_with_weights[(src, des)] / (self.nodes_count - 1) * 2, gid=gid)
+                  lw=self.lines_with_weights[(src, des)] / (
+                              max(self.weights) - min(self.weights)) * self.line_width_multiplier, gid=gid)
         self.ax.add_patch(arc)
+        self.lines_width_values.append(
+            self.lines_with_weights[(src, des)] / (max(self.weights) - min(self.weights)) * self.line_width_multiplier)
         return (x1 + x2) / 2, abs(x1 - x2) / 2
 
     # Check given cordinates on any arcs or not. If it is on the arc, return arc id
@@ -202,7 +237,7 @@ class ArcDiagram:
         for i in range(len(self.arc_equations)):
             h, r = self.arc_equations[i]
             value = y_co ** 2 + (x_co - h) ** 2
-            line_half_width = 0.01 * (self.nodes_count - 1) * self.weights[i] / (self.nodes_count - 1) / 2
+            line_half_width = 0.01 * self.lines_width_values[i]
             if (r - line_half_width) ** 2 < value < (r + line_half_width) ** 2:
                 return i
         return -1
@@ -215,7 +250,6 @@ class ArcDiagram:
         :param color: colour to change the arc
         :return: none
         """
-
         self.ax.patches[n].set_color(color)
 
     def change_line_colors_for_point(self, point, color):
@@ -234,19 +268,32 @@ class ArcDiagram:
 
         index_lst = self.sources.index[self.sources == node_name].tolist()
         index_lst.extend(self.targets.index[self.targets == node_name].tolist())
+
+        # Remove previously created weight text up on the arc
+        if color == self.graph_colour:
+            index_to_check = len(self.ax.texts)-1
+            count_found = 0
+            while count_found < len(index_lst) and index_to_check > 0:
+                obj = self.ax.texts[index_to_check]
+                try:
+                    temp = int(obj.get_text())
+                    obj.set_visible(False)
+                    count_found += 1
+                    self.ax.texts.remove(obj)
+                except:
+                    pass
+                index_to_check -= 1
+
         for index in index_lst:
             self.change_arc_color(index, color)
 
             # Added weights up on the arcs
-            h, r = self.arc_equations[index]
-            text_color = color
-            weight = 'regular'
-            if text_color == self.graph_colour:
-                text_color = self.background_colour
-                weight = 'bold'
-            self.ax.annotate(self.weights[index], (h, r), xytext=(0, 6), rotation=0, textcoords="offset points",
-                             fontsize=10,
-                             ha='left', va='bottom', color=text_color, weight=weight)
+            if color != self.graph_colour:
+                h, r = self.arc_equations[index]
+                props = dict(boxstyle='round', facecolor=self.background_colour,
+                             edgecolor=self.node_selected_arc_colour, alpha=0.5)
+                self.ax.text(h, r, str(self.weights[index]), fontsize=self.font_size,
+                              fontfamily=self.font_type, color=self.node_selected_arc_colour, bbox=props)
         return self.fig
 
     def click_on_node(self, event):
@@ -299,15 +346,13 @@ class ArcDiagram:
 
         if self.previously_selected_arc > 0:
             self.change_arc_color(self.previously_selected_arc, self.graph_colour)
-            # self.ax.patches[self.previously_selected_arc].set_color(self.graph_colour)
             self.previously_selected_arc = -1
 
-        if arc_id >= 0:
+        if arc_id >= 0 and y_coordinate > 0.2:
             from_node = self.sources[arc_id]
             to_node = self.targets[arc_id]
             line_weight = self.weights[arc_id]
             self.change_arc_color(arc_id, self.selected_line_colour)
-            # self.ax.patches[arc_id].set_color(self.selected_line_colour)
             self.previously_selected_arc = arc_id
 
         # Clear the previously created box in the graph
@@ -438,9 +483,61 @@ class ArcDiagram:
 
         :return: colour of the selected arc
         """
-        return self.node_selected_arc_colour
+        return self.selected_line_colour
 
-    # Change font size of the graph
+    def set_title_font_colour(self, title_font_colour):
+        """
+        Set the colour of the font in title of the diagram
+        :return none.
+
+        :param title_font_colour: colour to change in title of the graph
+        :return: none
+        """
+        self.title_font_colour = title_font_colour
+
+    def get_title_font_colour(self):
+        """
+        Return the value of colour in title of the graph.
+
+        :return: colour of the font in title of the graph
+        """
+        return self.title_font_colour
+
+    # Change value of the from weight of the graph
+    def set_from_weight(self, from_weight):
+        """
+        Set value of the from weight used in the graph and return none.
+
+        :param from_weight: value of from weight to change
+        :return: none
+        """
+        self.from_weight = from_weight
+
+    def get_from_weight(self):
+        """
+        Return value of the from weight in the graph.
+
+        :return: from weight in graph
+        """
+        return self.from_weight
+
+    def set_to_weight(self, to_weight):
+        """
+        Set value of the to weight used in the graph and return none.
+
+        :param to_weight: value of to weight to change
+        :return: none
+        """
+        self.to_weight = to_weight
+
+    def get_to_weight(self):
+        """
+        Return value of the to weight in the graph.
+
+        :return: to weight in graph
+        """
+        return self.to_weight
+
     def set_font_size(self, font_size):
         """
         Set font size used in the graph and return none.
@@ -458,7 +555,57 @@ class ArcDiagram:
         """
         return self.font_size
 
-    # Change font type in the graph
+    def set_title_font_size(self, title_font_size):
+        """
+        Set font size of title used in the graph and return none.
+
+        :param title_font_size: value of font size in title to change
+        :return: none
+        """
+        self.title_font_size = title_font_size
+
+    def get_title_font_size(self):
+        """
+        Return the font size of title in the graph.
+
+        :return: font size of title in graph
+        """
+        return self.title_font_size
+
+    def set_title(self, title):
+        """
+        Set title of the graph and return none.
+
+        :param title: title to change
+        :return: none
+        """
+        self.title = title
+
+    def get_title(self):
+        """
+        Return the title of the graph.
+
+        :return: title of the graph
+        """
+        return self.title
+
+    def set_line_width_multiplier(self, line_width_multiplier):
+        """
+        Set value of the line_width_multiplier used in the graph and return none.
+
+        :param line_width_multiplier: value of line width multiplier to change
+        :return: none
+        """
+        self.line_width_multiplier = line_width_multiplier
+
+    def get_line_width_multiplier(self):
+        """
+        Return value of the line width multiplier in the graph.
+
+        :return: value of the line width multiplier in graph
+        """
+        return self.line_width_multiplier
+
     def set_font_type(self, font_type):
         """
         Set font type used in the graph and return none.
@@ -468,7 +615,6 @@ class ArcDiagram:
         """
         self.font_type = font_type
 
-    # Get font type in the graph
     def get_font_type(self):
         """
         Return the font type in the graph.
@@ -476,6 +622,38 @@ class ArcDiagram:
         :return: font type in graph
         """
         return self.font_type
+
+    def set_title_font_type(self, title_font_type):
+        """
+        Set font type used for title in the graph and return none.
+
+        :param title_font_type: font type to change in title
+        :return: none
+        """
+        self.title_font_type = title_font_type
+
+    def get_title_font_type(self):
+        """
+        Return the font type of the title in the graph.
+
+        :return: font type of the title in the graph
+        """
+        return self.title_font_type
+
+    def get_weight_for_two_nodes(self, node_1, node_2):
+        """
+        Return weight of the arc between given two nodes(if there exist any arc)
+        Else return None
+        :param node_1: Name of the first node
+        :param node_2: Name of the second node
+        :return: Weight of the arc between two nodes(or None)
+        """
+        if (node_1, node_2) in self.lines_with_weights.keys():
+            return self.lines_with_weights[(node_1, node_2)]
+        elif (node_2, node_1) in self.lines_with_weights.keys():
+            return self.lines_with_weights[(node_2, node_1)]
+        else:
+            return None
 
     def generate_chart(self):
         """
@@ -486,7 +664,7 @@ class ArcDiagram:
         """
 
         self.fig = plt.figure(figsize=(6, 6))
-        self.num_of_rows, self.sources, self.targets, self.weights = self.get_information_from_file()
+        self.num_of_rows, self.sources, self.targets, self.weights = self.get_information()
         self.nodes, self.positions_of_nodes = self.get_sorted_list_of_nodes_with_positions(self.sources, self.targets)
 
         self.set_lines_weights_for_no_duplicate_data(self.sources, self.targets, self.weights, self.num_of_rows)
@@ -496,9 +674,7 @@ class ArcDiagram:
         self.ax = self.fig.add_subplot(1, 1, 1)
         self.ax.set_ylim(-5, self.nodes_count / 2 + 1)
         self.ax.set_xlim(-1, self.nodes_count + 1)
-        self.fig.canvas.set_window_title('Arc diagram')
         self.ax.axis('off')
-        self.ax.title.set_text(self.title)
         self.fig.set_facecolor(self.background_colour)
 
         # Position the nodes in the graph
@@ -530,6 +706,20 @@ class ArcDiagram:
         self.fig.canvas.mpl_connect('button_press_event', self.click_on_node)
         self.fig.canvas.mpl_connect('button_press_event', self.click_on_arc)
 
+        plt.suptitle(self.title, color=self.title_font_colour,
+                     # pad=self.title_font_size * 1.5,
+                     fontsize=self.title_font_size,
+                     fontweight='bold', fontname=self.title_font_type)
+
+        if self.sub_title != "( Weight range:   -   )":
+            plt.title(self.sub_title, color=self.title_font_colour,
+                      pad=self.title_font_size * 1.5,
+                      fontsize=self.title_font_size // 2,
+                      fontname=self.title_font_type)
+
         self.fig.tight_layout()
+
+        self.from_weight = None
+        self.to_weight = None
 
         return self.fig
