@@ -2,10 +2,10 @@ import customtkinter
 
 from helpers.home_frame_factory import HomeFrameFactory
 
-def  get_tab_frame(root):
+def  get_tab_frame(root, left_frame_width, right_frame_width):
     
     frame_left = customtkinter.CTkFrame(master=root,
-                                                 width=180,
+                                                 width=left_frame_width,
                                                  corner_radius=0)
     frame_left.grid(row=0, column=0, sticky="nswe")
 
@@ -16,13 +16,13 @@ def  get_tab_frame(root):
 
 
     def select_chart_1():
-        root.frame_right=HomeFrameFactory.get_home_frame(0,root)
+        root.frame_right=HomeFrameFactory.get_home_frame(0, root, right_frame_width)
           
     def select_chart_2():
-        root.frame_right=HomeFrameFactory.get_home_frame(1,root)
+        root.frame_right=HomeFrameFactory.get_home_frame(1, root, right_frame_width)
      
     def select_chart_3():
-        root.frame_right=HomeFrameFactory.get_home_frame(2,root)
+        root.frame_right=HomeFrameFactory.get_home_frame(2, root, right_frame_width)
        
     
     # configure grid layout (1x11)
