@@ -1,6 +1,6 @@
 import tkinter
 import customtkinter
-from tkinter import filedialog,Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import customtkinter
 from modify_box_frames.arc_modify_box import get_arc_modify_box
 from helpers.graphs import *
@@ -10,7 +10,7 @@ import pandas as pd
 class ArcModify:
 
     @staticmethod
-    def get_frame(root, arc_diagram):
+    def get_frame(root, arc_diagram, right_frame_width):
 
         arc_diagram = arc_diagram
 
@@ -31,7 +31,7 @@ class ArcModify:
         my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
         # create content frame and put it inside canvas
-        frame_right = customtkinter.CTkFrame(master=my_canvas, width=1300, height=1500)
+        frame_right = customtkinter.CTkFrame(master=my_canvas, width=right_frame_width, height=1500)
         frame_right.grid_propagate(0)  # give static fixed size to frame_right
         my_canvas.create_window((0, 0), window=frame_right, anchor="nw")
 
@@ -54,7 +54,7 @@ class ArcModify:
                                                    text="Modify",
                                                    command=go_bottom
                                                    )
-        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
+        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=100)
 
         draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
                                                    sticky="ns")
@@ -65,34 +65,34 @@ class ArcModify:
 
             window = customtkinter.CTkToplevel(root)
             window.geometry("800x500")
-            window.title("Sample arc chart")
+            window.title(arc_diagram.get_title())
 
             chart = FigureCanvasTkAgg(figure, window)
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
-        #function for download the sample csv file
+        # function for download the graph
         def download_sample():
-            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
-                                          filetypes=[("CSV", ".csv")], parent=root)
+            location = filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
+                                                filetypes=[("PNG", ".png")], parent=root)
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
- 
-            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
-                              }, index=range(len(df['Source'])))
-            dataFrame.to_csv(f"{location.name}.csv")
+            if location is not None:
+                arc_diagram.save_image(f"{location.name}.png")
+                messagebox.showinfo("Chart Save", "Save Completed", parent=root)
+            else:
+                pass
 
         download_btn = customtkinter.CTkButton(master=frame_right,
-                                               text="Download",
+                                               text="Save Chart",
                                                command=download_sample
 
                                                )  # font name and size in px
         download_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
 
-        open_graph_btn = customtkinter.CTkButton(master=frame_right,
-                                                 text="Open",
-                                                 command=open_graph
-                                                 )
-        open_graph_btn.grid(row=6, column=1, columnspan=2, pady=10, padx=10)
+        open_graph_btn= customtkinter.CTkButton(master=frame_right,
+                                                    text="Full Screen View",
+                                                    command=open_graph
+                                                    )
+        open_graph_btn.grid(row=0, column=3, columnspan=2, pady=10, padx=10)
 
         """
         #upload frame in the bottom
@@ -102,8 +102,8 @@ class ArcModify:
         """
 
         # modify frame in the bottom
-        modify_frame = get_arc_modify_box(frame_right, root, arc_diagram)
-        modify_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=5, padx=20, sticky="nwse")
+        modify_frame = get_arc_modify_box(frame_right, root, arc_diagram, right_frame_width)
+        modify_frame.grid(row=7, column=0, rowspan=5, columnspan=4, pady=5, padx=20, sticky="nwse")
         modify_frame.grid_propagate(0)
 
         return main_frame

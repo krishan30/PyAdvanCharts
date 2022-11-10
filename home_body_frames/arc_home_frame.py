@@ -13,7 +13,7 @@ from components.upload_box import get_upload_box
 class ArcHome():
 
     @staticmethod
-    def get_frame(root, arc_diagram):
+    def get_frame(root, arc_diagram, right_frame_width):
 
         # arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
 
@@ -34,7 +34,7 @@ class ArcHome():
         my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
         # create content frame and put it inside canvas
-        frame_right = customtkinter.CTkFrame(master=my_canvas, width=1300, height=1500)
+        frame_right = customtkinter.CTkFrame(master=my_canvas, width=right_frame_width, height=1500)
         frame_right.grid_propagate(0)  # give static fixed size to frame_right
         my_canvas.create_window((0, 0), window=frame_right, anchor="nw")
 
@@ -116,11 +116,17 @@ class ArcHome():
         text_frame.insert(tkinter.END, "An arc diagram is a special kind of network graph. "
                                        "It is consituted by nodes that represent entities and by links that show "
                                        "relationships between entities. In arc diagrams, nodes are displayed along a "
-                                       "single axis and links are represented with arcs.")
+                                       "single axis and links are represented with arcs. Thickness of the lines are vary "
+                                       "according to the amount of wight between two nodes related.\n\n"
+                                       "Nodes are in sorted order and viewer can find required node by following the "
+                                       "order from the leftmost node to the rightmost node in the graph. This diagram makes "
+                                       "easier to make clusters of data based on relationship between them. This chart type "
+                                       "useful to visualize interactions between two objects(people) such as interactions "
+                                       "between two accounts in a social media network.")
         text_frame.grid(row=6, column=0, columnspan=4, pady=20, padx=20, sticky="ew")
 
         # upload frame in the bottom
-        upload_frame = get_upload_box(frame_right, root,2)
+        upload_frame = get_upload_box(frame_right, root, 2, right_frame_width)
         upload_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=100, padx=100, sticky="nswe")
         upload_frame.grid_propagate(0)
 

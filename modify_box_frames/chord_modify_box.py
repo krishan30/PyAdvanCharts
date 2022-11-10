@@ -4,7 +4,7 @@ import customtkinter
 
 
 
-def get_chord_modify_box(root, root_parent, chord_diagram):
+def get_chord_modify_box(root, root_parent, chord_diagram, right_frame_width):
     modify_frame = customtkinter.CTkFrame(master=root)
 
     modify_frame.rowconfigure((1, 2, 3, 4, 6), weight=1)
@@ -38,17 +38,15 @@ def get_chord_modify_box(root, root_parent, chord_diagram):
         title = new_title_text.get()
         if title:
             chord_diagram.change_title(title)
-            ChordModify.get_frame(root_parent, chord_diagram)
-        else:
-            ChordModify.get_frame(root_parent, chord_diagram)
+        ChordModify.get_frame(root_parent, chord_diagram, right_frame_width)
 
     chart_modification_label = customtkinter.CTkLabel(master=modify_frame, text="Chart Customization",
                                                       text_font=("serif", 18))
-    chart_modification_label.grid(row=0, column=1, columnspan=1, padx=50)
+    chart_modification_label.grid(row=0, column=0, columnspan=4, padx=50, pady=10)
 
     chart_configuration_label = customtkinter.CTkLabel(master=modify_frame, text="Chart Modifications",
                                                        text_font=("serif", 15))
-    chart_configuration_label.grid(row=1, column=0, pady=10, padx=10, sticky="w")
+    chart_configuration_label.grid(row=1, column=0, columnspan=2, pady=10, padx=10, sticky="w")
     options = ['viridis', 'plasma', 'inferno', 'magma', 'cividis']
     # bg color selection
     bg_color_label = customtkinter.CTkLabel(master=modify_frame, text="Chart Colour Theme:", anchor=E)
@@ -87,24 +85,24 @@ def get_chord_modify_box(root, root_parent, chord_diagram):
 
     title_configuration_label = customtkinter.CTkLabel(master=modify_frame, text="Title Modifications",
                                                        text_font=("serif", 15), anchor=W)
-    title_configuration_label.grid(row=1, column=2, pady=10, padx=10, sticky="w")
+    title_configuration_label.grid(row=1, column=3, columnspan=2, pady=10, padx=10, sticky="w")
     new_title_label = customtkinter.CTkLabel(master=modify_frame, text="New Title:", anchor=E)
-    new_title_label.grid(row=2, column=2, pady=10, padx=10, sticky="w")
+    new_title_label.grid(row=2, column=3, pady=10, padx=10, sticky="w")
 
     new_title_text = customtkinter.CTkEntry(master=modify_frame, placeholder_text=chord_diagram.get_title())
-    new_title_text.grid(row=2, column=2, pady=10, padx=10, sticky="e")
+    new_title_text.grid(row=2, column=3, pady=10, padx=10, sticky="e")
     # selected arc color selection
     title_font_color_label = customtkinter.CTkLabel(master=modify_frame, text="Title Font Color:", anchor=E)
-    title_font_color_label.grid(row=3, column=2, pady=10, padx=10, sticky="w")
+    title_font_color_label.grid(row=3, column=3, pady=10, padx=10, sticky="w")
 
     title_font_color_btn = customtkinter.CTkButton(master=modify_frame,
                                                    text="Choose", command=set_chord_title_font_colour
                                                    )
-    title_font_color_btn.grid(row=3, column=2, pady=10, padx=10, sticky="e")
+    title_font_color_btn.grid(row=3, column=3, pady=10, padx=10, sticky="e")
 
     # change font size
     title_font_type_label = customtkinter.CTkLabel(master=modify_frame, text="Title Font Type:", anchor=E)
-    title_font_type_label.grid(row=4, column=2, pady=10, padx=10, sticky="w")
+    title_font_type_label.grid(row=4, column=3, pady=10, padx=10, sticky="w")
 
     title_font_type_menu = customtkinter.CTkOptionMenu(master=modify_frame,
                                                        values=["sans-serif", "serif", "cursive", "fantasy",
@@ -112,21 +110,21 @@ def get_chord_modify_box(root, root_parent, chord_diagram):
                                                        command=chord_diagram.change_title_font_type
                                                        )
     title_font_type_menu.set(chord_diagram.get_title_font_type())
-    title_font_type_menu.grid(row=4, column=2, pady=10, padx=10, sticky="e")
+    title_font_type_menu.grid(row=4, column=3, pady=10, padx=10, sticky="e")
 
     # Font type selection
     title_font_size_label = customtkinter.CTkLabel(master=modify_frame, text="Title Font Size:", anchor=E)
-    title_font_size_label.grid(row=5, column=2, pady=10, padx=10, sticky="w")
+    title_font_size_label.grid(row=5, column=3, pady=10, padx=10, sticky="w")
 
     title_font_size_menu = customtkinter.CTkOptionMenu(master=modify_frame,
                                                        values=[str(i) for i in range(5, 41)],
                                                        command=chord_diagram.change_title_font_size
                                                        )
     title_font_size_menu.set(str(chord_diagram.get_title_font_size()))
-    title_font_size_menu.grid(row=5, column=2, pady=10, padx=10, sticky="e")
+    title_font_size_menu.grid(row=5, column=3, pady=10, padx=10, sticky="e")
     # regenerate graph button
     regenerate_graph_btn = customtkinter.CTkButton(master=modify_frame,
                                                    text="Apply Changes", command=regenerate_graph,height=40, width=180)
-    regenerate_graph_btn.grid(row=8, column=1, columnspan=1, pady=10, padx=10)
+    regenerate_graph_btn.grid(row=8, column=0, columnspan=4, pady=10, padx=10)
 
     return modify_frame

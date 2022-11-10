@@ -9,7 +9,7 @@ import pandas as pd
 class ChordModify:
 
     @staticmethod
-    def get_frame(root, chord_diagram):
+    def get_frame(root, chord_diagram, right_frame_width):
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -27,7 +27,7 @@ class ChordModify:
         my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
         # create content frame and put it inside canvas
-        frame_right = customtkinter.CTkFrame(master=my_canvas, width=1300, height=1500)
+        frame_right = customtkinter.CTkFrame(master=my_canvas, width=right_frame_width, height=1500)
         frame_right.grid_propagate(0)  # give static fixed size to frame_right
         my_canvas.create_window((0, 0), window=frame_right, anchor="nw")
 
@@ -50,7 +50,7 @@ class ChordModify:
                                                    text="Modify",
                                                    command=go_bottom
                                                    )
-        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
+        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=150)
 
         draw_chord(frame_right, chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
                                                                     padx=20,
@@ -98,7 +98,7 @@ class ChordModify:
         """
 
         # modify frame in the bottom
-        modify_frame = get_chord_modify_box(frame_right, root, chord_diagram)
+        modify_frame = get_chord_modify_box(frame_right, root, chord_diagram, right_frame_width)
         modify_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=5, padx=20, sticky="nwse")
         modify_frame.grid_propagate(0)
 

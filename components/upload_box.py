@@ -16,7 +16,7 @@ input_frame -> validate_file_frame -> preprocess_frame -> generate_chart_frame
 """
 
 
-def get_upload_box(root, master, type):
+def get_upload_box(root, master, type, right_frame_width):
     # full frame(parent of all child frames)
     upload_frame = customtkinter.CTkFrame(master=root)
 
@@ -131,8 +131,8 @@ def get_upload_box(root, master, type):
         elif type == 1:
             chart_diagram = ChordChart(data_frame=data_frame)
         elif type == 2:
-            chart_diagram=ArcDiagram(file)
-        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram)
+            chart_diagram = ArcDiagram(data_frame=data_frame)
+        master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram, right_frame_width)
 
     return upload_frame
 
