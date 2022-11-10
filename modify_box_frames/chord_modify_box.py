@@ -2,7 +2,6 @@ from tkinter import colorchooser, CENTER, SE, W, E
 
 import customtkinter
 
-from charts.chord_chart import ChordChart
 
 
 def get_chord_modify_box(root, root_parent, chord_diagram, right_frame_width):
@@ -35,7 +34,7 @@ def get_chord_modify_box(root, root_parent, chord_diagram, right_frame_width):
         chord_diagram.change_title_font_colour(hex_code)
 
     def regenerate_graph():
-        from body_frames.chord_modify_frame import ChordModify
+        from modify_body_frames.chord_modify_frame import ChordModify
         title = new_title_text.get()
         if title:
             chord_diagram.change_title(title)

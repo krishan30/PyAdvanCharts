@@ -1,10 +1,9 @@
 import tkinter
 import customtkinter
-from tkinter import Y, ttk
+from tkinter import filedialog,Y, ttk
 import customtkinter
-from components.modify_box_for_arc import get_arc_modify_box
+from modify_box_frames.arc_modify_box import get_arc_modify_box
 from helpers.graphs import *
-import PySimpleGUI as sg
 import pandas as pd
 
 
@@ -71,40 +70,16 @@ class ArcModify:
             chart = FigureCanvasTkAgg(figure, window)
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
-        # function for download the sample csv file
+        #function for download the sample csv file
         def download_sample():
-            location = sg.popup_get_file("Choose file location",
-                                         title="Save sample file as",
-                                         default_path="",
-                                         default_extension=".csv",
-                                         save_as=True,
-                                         multiple_files=False,
-                                         file_types=(('ALL Files', '*.* *'),),
-                                         no_window=False,
-                                         size=(None, None),
-                                         button_color=None,
-                                         background_color=None,
-                                         text_color=None,
-                                         icon=None,
-                                         font=None,
-                                         no_titlebar=False,
-                                         grab_anywhere=False,
-                                         keep_on_top=None,
-                                         location=(None, None),
-                                         relative_location=(None, None),
-                                         initial_folder=None,
-                                         image=None,
-                                         files_delimiter=";",
-                                         modal=True,
-                                         history=False,
-                                         show_hidden=True,
-                                         history_setting_filename=None)
+            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
+                                          filetypes=[("CSV", ".csv")], parent=root)
 
-            df = pd.read_csv("./csv_samples/arc_sample.csv")
-
-            dataFrame = pd.DataFrame({'from': df['from'], 'to': df['to'], 'weight': df['weight']
-                                      }, index=range(len(df['from'])))
-            dataFrame.to_csv(location)
+            df = pd.read_csv("./csv_samples/sankey_sample.csv")
+ 
+            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
+                              }, index=range(len(df['Source'])))
+            dataFrame.to_csv(f"{location.name}.csv")
 
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                text="Save Chart",

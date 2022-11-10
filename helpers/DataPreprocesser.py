@@ -1,5 +1,3 @@
-import tkinter
-
 import numpy as np
 import pandas as pd
 
@@ -10,8 +8,6 @@ class DataPreprocessor:
     def data_cleaner(cls, data_frame: pd.DataFrame):
         initial_number_of_data_entries = data_frame.shape[0]
 
-        if "Weight" not in data_frame.dtypes:
-            return "Weight column Not Exist"
         if data_frame.dtypes["Weight"] == 'int64' or data_frame.dtypes["Weight"] == 'float64':
             data_frame.dropna(inplace=True)
         else:

@@ -107,8 +107,8 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
 
     # Regenerate graph according to the new changes
     def regenerate_graph():
-        nonlocal from_weight, to_weight
         from body_frames.arc_modify_frame import ArcModify
+        nonlocal from_weight, to_weight
         arc_diagram.set_background_colour(background_colour)
         arc_diagram.set_graph_colour(arc_colour)
         arc_diagram.set_node_selected_arc_colour(node_selected_arc_colour)

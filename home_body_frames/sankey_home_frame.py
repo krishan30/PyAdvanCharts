@@ -1,11 +1,11 @@
 import tkinter
 import customtkinter
-from tkinter import filedialog,Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import tkinter.messagebox
 import customtkinter
+from charts.sankey_chart import SankeyChart
 import components.custom_table as custom_table
 from helpers.graphs import *
-import PySimpleGUI as sg
 import pandas as pd
 
 from components.upload_box import get_upload_box
@@ -93,7 +93,12 @@ class SankeyHome():
  
             dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
                               }, index=range(len(df['Source'])))
-            dataFrame.to_csv(f"{location.name}.csv")
+
+            if location is not None :
+                dataFrame.to_csv(f"{location.name}.csv")
+                messagebox.showinfo("CSV File", "Save Completed", parent=root)
+            else:
+                pass
 
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                 text="Download",

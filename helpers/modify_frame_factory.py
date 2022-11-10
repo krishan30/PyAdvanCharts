@@ -1,7 +1,7 @@
-from body_frames.sankey_modify_frame import SankeyModify
-from body_frames.chord_modify_frame import ChordModify
-from body_frames.arc_modify_frame import ArcModify
-from charts.arc_diagram import ArcDiagram
+from modify_body_frames.sankey_modify_frame import SankeyModify
+from modify_body_frames.chord_modify_frame import ChordModify
+from modify_body_frames.arc_modify_frame import ArcModify
+
 
 
 class ModifyFrameFactory:

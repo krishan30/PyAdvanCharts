@@ -20,6 +20,7 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     font_color=sankey_diagram.get_font_color()
     block_out_color=sankey_diagram.get_block_out_color()
     strip_out_color=sankey_diagram.get_strip_out_color()
+    title=sankey_diagram.get_title()
 
     show_block_out=False
     show_strip_out=False
@@ -36,14 +37,14 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     # Set label font size
     def set_label_font_size(value):
         nonlocal font_size
-        print(value)
+        #print(value)
         if value is not None:
             font_size = int(value)
 
     # Set weight font size
     def set_weight_font_size(value):
         nonlocal weight_font_size
-        print(value)
+        #print(value)
         if value is not None:
             weight_font_size = int(value)
 
@@ -114,34 +115,34 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     #set alpha value for block
     def set_block_alpha(value):
         nonlocal block_alpha
-        print(value)
+        #print(value)
         if value is not None:
             block_alpha = value
 
     #set alpha value for strip
     def set_strip_alpha(value):
         nonlocal strip_alpha
-        print(value)
+        #print(value)
         if value is not None:
             strip_alpha = value
 
     #set vertical margin for block
     def set_block_v_m(value):
         nonlocal block_v_m
-        print(value)
+        #print(value)
         if value is not None:
             block_v_m = value/10
 
     #set horizontal margin for block
     def set_block_h_m(value):
         nonlocal block_h_m
-        print(value)
+        #print(value)
         if value is not None:
             block_h_m = value
             
     # Regenerate graph according to the new changes
     def regenerate_graph():
-        from body_frames.sankey_modify_frame import SankeyModify
+        from modify_body_frames.sankey_modify_frame import SankeyModify
         sankey_diagram.set_label_font_size(font_size)
         sankey_diagram.set_weight_font_size(weight_font_size)
         sankey_diagram.set_bg_color(background_colour)
@@ -156,7 +157,11 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
         sankey_diagram.set_strip_alpha(strip_alpha)
         sankey_diagram.set_block_v_m(block_v_m)
         sankey_diagram.set_block_h_m(block_h_m)
-
+        nonlocal title
+        if new_title_text.get()!="":
+            title=new_title_text.get()
+        
+        sankey_diagram.set_title(title)
 
         if show_block_out==False:
             sankey_diagram.remove_block_out()
@@ -297,7 +302,7 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
 
 
     #label alpha selection
-    alpha_label = customtkinter.CTkLabel(master=modify_frame, text="Label Alpha :   "+str(block_alpha))
+    alpha_label = customtkinter.CTkLabel(master=modify_frame, text="Label Alpha :   "+str( float(round(block_alpha,3)) ))
     alpha_label.grid(row=3, column=2, pady=10, padx=10, sticky="w")
 
     alpha_label_slider = customtkinter.CTkSlider(master=modify_frame, from_=0, to=1, command=set_block_alpha,
@@ -306,15 +311,21 @@ def get_sankey_modify_box(root,root_parent, sankey_diagram):
     alpha_label_slider.grid(row=3, column=2, pady=10, padx=10, sticky="e")
 
     #strip alpha selection
-    alpha_strip = customtkinter.CTkLabel(master=modify_frame, text="Strip Alpha :   "+str(strip_alpha))
+    alpha_strip = customtkinter.CTkLabel(master=modify_frame, text="Strip Alpha :   "+str( float(round(strip_alpha,3)) ))
     alpha_strip.grid(row=4, column=0, pady=10, padx=10, sticky="w")
 
     alpha_strip_slider = customtkinter.CTkSlider(master=modify_frame, from_=0, to=1, command=set_strip_alpha,
-                                     number_of_steps=20)
+                                     number_of_steps=10)
     alpha_strip_slider.set(strip_alpha)
     alpha_strip_slider.grid(row=4, column=0, pady=10, padx=10, sticky="e")
 
-    
+    #title entry
+    new_title_label = customtkinter.CTkLabel(master=modify_frame, text="New Title:")
+    new_title_label.grid(row=4, column=1, pady=10, padx=10)
+
+    new_title_text = customtkinter.CTkEntry(master=modify_frame, placeholder_text=title)
+    new_title_text.grid(row=4, column=1, pady=10, padx=10, sticky="e")
+   
     #Block outline
     block_outline_label = customtkinter.CTkLabel(master=modify_frame, text="Block outline :")
     block_outline_label.grid(row=5, column=0, pady=10, padx=10, sticky="e")

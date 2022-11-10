@@ -47,6 +47,7 @@ class SankeyChart:
         self.strip_out_color=None
         self.block_vertical_margin=0.02
         self.block_h_m=0
+        self.title="Sankey Chart"
 
         self.from_=df['Source']
         self.to=df['Target']
@@ -220,7 +221,10 @@ class SankeyChart:
         self.figure=plt.figure()
         plt.rc('text', usetex=False)
         plt.rc('font', family=self.font_family)
-
+        plt.title(self.title, color=self.font_color, pad=self.font_size * 1.5,
+                  fontsize=self.font_size * 1.2,
+                  fontweight='bold', fontname=self.font_family)
+                  
         self.draw_blocks()
         self.draw_strips()
         #plt.rcParams['figure.facecolor'] = self.bg_color
@@ -283,6 +287,8 @@ class SankeyChart:
     def set_block_h_m(self,value):
         self.block_h_m=value
     
+    def set_title(self,title):
+        self.title=title
 
 
     def get_pallete(self):
@@ -330,6 +336,9 @@ class SankeyChart:
         return self.block_vertical_margin
     def get_block_h_m(self):
         return self.block_h_m
+    def get_title(self):
+        return self.title
+
     def remove_block_out(self):
         self.block_out_color=None
     

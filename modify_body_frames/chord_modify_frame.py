@@ -1,9 +1,8 @@
 import tkinter
-from tkinter import Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import customtkinter
-from components.modify_box_chord_diagram import get_chord_modify_box
+from modify_box_frames.chord_modify_box import get_chord_modify_box
 from helpers.graphs import *
-import PySimpleGUI as sg
 import pandas as pd
 
 
@@ -53,8 +52,9 @@ class ChordModify:
                                                    )
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
 
-        draw_chord(frame_right,chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
-                                                     sticky="ns")
+        draw_chord(frame_right, chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
+                                                                    padx=20,
+                                                                    sticky="ns")
 
         # function for open chart in a new window
         def open_graph():
@@ -68,53 +68,27 @@ class ChordModify:
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
         # function for download the sample csv file
-        def download_sample():
-            location = sg.popup_get_file("Choose file location",
-                                         title="Save sample file as",
-                                         default_path="",
-                                         default_extension=".csv",
-                                         save_as=True,
-                                         multiple_files=False,
-                                         file_types=(('ALL Files', '*.* *'),),
-                                         no_window=False,
-                                         size=(None, None),
-                                         button_color=None,
-                                         background_color=None,
-                                         text_color=None,
-                                         icon=None,
-                                         font=None,
-                                         no_titlebar=False,
-                                         grab_anywhere=False,
-                                         keep_on_top=None,
-                                         location=(None, None),
-                                         relative_location=(None, None),
-                                         initial_folder=None,
-                                         image=None,
-                                         files_delimiter=";",
-                                         modal=True,
-                                         history=False,
-                                         show_hidden=True,
-                                         history_setting_filename=None)
+        def save_chart():
+            location = filedialog.asksaveasfile(initialdir='.\\', title='Save Chart',
+                                                filetypes=[("PNG", ".png")], parent=root)
+            if location is not None:
+                chord_diagram.save_image(f"{location.name}.png")
+                messagebox.showinfo("Chart Save", "Save Completed",parent=root)
+            else:
+                pass
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
+        save_chart_btn = customtkinter.CTkButton(master=frame_right,
+                                                 text="Save Chart",
+                                                 command=save_chart
 
-            dataFrame = pd.DataFrame({'from': df['from'], 'to': df['to'], 'weight': df['weight']
-                                      }, index=range(len(df['from'])))
-            dataFrame.to_csv(location)
+                                                 )  # font name and size in px
+        save_chart_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
 
-        download_btn = customtkinter.CTkButton(master=frame_right,
-                                               text="Save Chart",
-                                               command=download_sample
-
-                                               )  # font name and size in px
-        download_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
-
-        open_graph_btn= customtkinter.CTkButton(master=frame_right,
-                                                    text="Full Screen View",
-                                                    command=open_graph
-                                                    )
+        open_graph_btn = customtkinter.CTkButton(master=frame_right,
+                                                 text="Full Screen View",
+                                                 command=open_graph
+                                                 )
         open_graph_btn.grid(row=0, column=3, columnspan=2, pady=10, padx=10)
-
 
         """
         #upload frame in the bottom

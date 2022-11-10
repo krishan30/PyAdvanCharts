@@ -154,6 +154,9 @@ class ChordChart:
     path_instructions-instruction for the patch to draw the arc
     """
 
+    def save_image(self, location):
+        plt.savefig(location, bbox_inches="tight", dpi=150)
+
     @classmethod
     def __arc_generator(cls, start_degree, end_degree, radius):
         if start_degree > end_degree:
@@ -305,8 +308,6 @@ class ChordChart:
 
         self.__ax.add_patch(self.__patch)
 
-
-
     """
     To draw a chord in the chart that going from one arc to other connecting arc
     
@@ -396,8 +397,9 @@ class ChordChart:
             min_angle = d_theta_2
 
         # creating the patch
-        #patch = patches.PathPatch(path, facecolor="none", edgecolor="none", lw=ChordChart.LINE_WIDTH)
-        patch = patches.PathPatch(path, facecolor=color_start, alpha=self.__alpha,edgecolor=color_start, lw=ChordChart.LINE_WIDTH)
+        # patch = patches.PathPatch(path, facecolor="none", edgecolor="none", lw=ChordChart.LINE_WIDTH)
+        patch = patches.PathPatch(path, facecolor=color_start, alpha=self.__alpha, edgecolor=color_start,
+                                  lw=ChordChart.LINE_WIDTH)
         self.__ax.add_patch(patch)
 
         # creating the grid
