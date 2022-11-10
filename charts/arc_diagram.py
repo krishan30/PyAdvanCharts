@@ -640,6 +640,14 @@ class ArcDiagram:
         """
         return self.title_font_type
 
+    def save_image(self, location):
+        """
+        Save graph as a image in given location and return None
+        :param location: path to save image
+        :return: None
+        """
+        plt.savefig(location, bbox_inches="tight", dpi=150)
+
     def get_weight_for_two_nodes(self, node_1, node_2):
         """
         Return weight of the arc between given two nodes(if there exist any arc)

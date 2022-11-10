@@ -1,6 +1,6 @@
 import tkinter
 import customtkinter
-from tkinter import filedialog,Y, ttk
+from tkinter import filedialog, Y, ttk, messagebox
 import customtkinter
 from modify_box_frames.arc_modify_box import get_arc_modify_box
 from helpers.graphs import *
@@ -70,16 +70,16 @@ class ArcModify:
             chart = FigureCanvasTkAgg(figure, window)
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
-        #function for download the sample csv file
+        # function for download the graph
         def download_sample():
-            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
-                                          filetypes=[("CSV", ".csv")], parent=root)
+            location = filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
+                                                filetypes=[("PNG", ".png")], parent=root)
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
- 
-            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
-                              }, index=range(len(df['Source'])))
-            dataFrame.to_csv(f"{location.name}.csv")
+            if location is not None:
+                arc_diagram.save_image(f"{location.name}.png")
+                messagebox.showinfo("Chart Save", "Save Completed", parent=root)
+            else:
+                pass
 
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                text="Save Chart",

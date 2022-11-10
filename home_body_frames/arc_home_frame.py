@@ -116,7 +116,13 @@ class ArcHome():
         text_frame.insert(tkinter.END, "An arc diagram is a special kind of network graph. "
                                        "It is consituted by nodes that represent entities and by links that show "
                                        "relationships between entities. In arc diagrams, nodes are displayed along a "
-                                       "single axis and links are represented with arcs.")
+                                       "single axis and links are represented with arcs. Thickness of the lines are vary "
+                                       "according to the amount of wight between two nodes related.\n\n"
+                                       "Nodes are in sorted order and viewer can find required node by following the "
+                                       "order from the leftmost node to the rightmost node in the graph. This diagram makes "
+                                       "easier to make clusters of data based on relationship between them. This chart type "
+                                       "useful to visualize interactions between two objects(people) such as interactions "
+                                       "between two accounts in a social media network.")
         text_frame.grid(row=6, column=0, columnspan=4, pady=20, padx=20, sticky="ew")
 
         # upload frame in the bottom

@@ -7,7 +7,6 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
     modify_frame = customtkinter.CTkFrame(master=root)
 
     modify_frame.rowconfigure((1, 2, 3, 4, 5, 7, 9, 10, 11, 12, 13), weight=1)
-    # modify_frame.rowconfigure((7, 8, 9, 10, 11, 12), weight=50)
     modify_frame.rowconfigure((6, 8, 14, 15), weight=5)
     modify_frame.columnconfigure((0, 2), weight=2)
     modify_frame.columnconfigure(1, weight=1)

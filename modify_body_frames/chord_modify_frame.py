@@ -50,7 +50,7 @@ class ChordModify:
                                                    text="Modify",
                                                    command=go_bottom
                                                    )
-        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
+        create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=150)
 
         draw_chord(frame_right, chord_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
                                                                     padx=20,
