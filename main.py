@@ -19,7 +19,7 @@ class App(customtkinter.CTk):
         self.height = self.winfo_screenheight()
         scaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0) / 100
 
-        self.width = self.winfo_screenwidth()//(scaleFactor)
+        self.width = self.winfo_screenwidth() // scaleFactor
         self.height = self.winfo_screenheight()//scaleFactor
 
         self.left_frame_width = self.width * 0.174

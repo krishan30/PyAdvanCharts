@@ -1,16 +1,20 @@
 import unittest
-from InputManager import InputManager
-import pandas as pd
+
+import customtkinter
+
+from helpers.InputManager import InputManager
 
 
 class InputManagerTestCase(unittest.TestCase):
 
     def test_read_input_invalid_file_path(self):
-        self.assertEqual(InputManager.read_input("data"), "Invalid Path")
+        root = None
+        self.assertEqual(InputManager.read_input("data", root), True)
 
     def test_read_input_csv_file(self):
-        print(InputManager.read_input("data2.csv"))
-        self.assertEqual( InputManager.read_input("data2.csv"), True)
+        root = None
+        self.assertEqual(InputManager.read_input("data2.csv", root), True)
 
     def test_read_input_invalid_file(self):
-        self.assertEqual(InputManager.read_input("data2.cs"), "Invalid File Type")
+        root = None
+        self.assertEqual(InputManager.read_input("data2.cs", root), "Invalid File Type")
