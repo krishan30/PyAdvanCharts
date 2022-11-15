@@ -21,17 +21,23 @@ class ArcHome():
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
 
-        # create canvas inside main_frame in left side
-        my_canvas = tkinter.Canvas(main_frame, background="grey")
-        my_canvas.pack(side=tkinter.LEFT, anchor="nw", fill=tkinter.BOTH, expand=1, )
+        #create canvas inside main_frame in left side
+        my_canvas=tkinter.Canvas(main_frame,background="grey")
+        
+        #create Scrollbar inside main_frame in right side
+        scrollbar=ttk.Scrollbar(main_frame,orient="vertical",command=my_canvas.yview)
+        scrollbar.pack(side=tkinter.RIGHT,fill=Y)
 
-        # create Scrollbar inside main_frame in right side
-        scrollbar = ttk.Scrollbar(main_frame, orient="vertical", command=my_canvas.yview)
-        scrollbar.pack(side=tkinter.RIGHT, fill=Y)
-
-        # connect scrollbar with canvas
-        my_canvas.configure(yscrollcommand=scrollbar.set)
-        my_canvas.bind('<Configure>', lambda e: my_canvas.configure(scrollregion=my_canvas.bbox("all")))
+        #create Scrollbar inside main_frame in right side
+        scrollbar_y=ttk.Scrollbar(main_frame,orient="horizontal",command=my_canvas.xview)
+        scrollbar_y.pack(side=tkinter.BOTTOM,fill=tkinter.X)
+         
+        
+        my_canvas.pack(side=tkinter.LEFT,anchor="nw",fill=tkinter.BOTH,expand=1,)
+        
+        #connect scrollbar with canvas
+        my_canvas.configure(yscrollcommand=scrollbar.set ,xscrollcommand=scrollbar_y.set)
+        my_canvas.bind('<Configure>', lambda e : my_canvas.configure(scrollregion=my_canvas.bbox("all")))
 
         # create content frame and put it inside canvas
         frame_right = customtkinter.CTkFrame(master=my_canvas, width=right_frame_width, height=1500)
