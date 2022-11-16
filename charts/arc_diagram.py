@@ -393,15 +393,15 @@ class ArcDiagram:
         self.arc_equations = arc_equations
 
     # Set weights (For testing purpose)
-    def set_weights(self, weights):
+    def set_lines_width_values(self, lines_width_values):
         """
-        Set the weights list related to arcs drawing in the graph and
+        Set the width list related to arcs drawing in the graph and
         return none.
 
-        :param weights: list of weights for each arc
+        :param lines_width_values: list of  values for width of each arc
         :return: none
         """
-        self.weights = weights
+        self.lines_width_values = lines_width_values
 
     # Set nodes count (For testing purpose)
     def set_nodes_count(self, nodes_count):
