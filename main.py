@@ -12,6 +12,8 @@ class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
 
+        self.iconbitmap("pac3.ico")
+
         self.width = self.winfo_screenwidth()
         self.height = self.winfo_screenheight()
 
