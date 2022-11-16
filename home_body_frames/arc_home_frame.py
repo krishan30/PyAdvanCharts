@@ -114,7 +114,7 @@ class ArcHome():
         text_frame = tkinter.Text(frame_right, padx=20, pady=10, width=10, height=8, background="#A7C2E0",
                                   wrap=tkinter.CHAR)
         text_frame.insert(tkinter.END, "An arc diagram is a special kind of network graph. "
-                                       "It is consituted by nodes that represent entities and by links that show "
+                                       "It is constituted by nodes that represent entities and by links that show "
                                        "relationships between entities. In arc diagrams, nodes are displayed along a "
                                        "single axis and links are represented with arcs. Thickness of the lines are vary "
                                        "according to the amount of wight between two nodes related.\n\n"
