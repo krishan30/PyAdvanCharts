@@ -44,7 +44,7 @@ class ArcDiagram:
         self.lines_width_values = None
 
         # previously clicked node and arc details are stored in here
-        self.previously_selected_node = 0
+        self.previously_selected_node = -1
         self.previously_selected_arc = -1
 
     def get_information(self):
@@ -61,7 +61,7 @@ class ArcDiagram:
         self.lines_with_weights = {}
         self.sub_title = "( Weight range: "
 
-        self.previously_selected_node = 0
+        self.previously_selected_node = -1
         self.previously_selected_arc = -1
 
         if self.path is None:
@@ -306,28 +306,30 @@ class ArcDiagram:
         """
         x1, y1 = event.xdata, event.ydata
         x_co = round(x1, 1)
-        y_co = round(y1, 0)
-        if int(y_co) == 0 and x_co.is_integer():
+        y_co = round(y1, 1)
+        if y_co == 0.0 and x_co.is_integer():
+            if self.previously_selected_node >= 0:
+                self.change_line_colors_for_point(self.previously_selected_node, self.graph_colour)
+                self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
+                self.add_node_text(self.previously_selected_node, self.background_colour, "bold",
+                               self.nodes)
+                self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
             # Change line colours
-            self.change_line_colors_for_point(self.previously_selected_node, self.graph_colour)
             self.change_line_colors_for_point(x_co, self.node_selected_arc_colour)
             # Change points colours
-            self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
             self.ax.scatter(x_co, 0, marker='o', color=self.node_selected_arc_colour)
             # Change node text styles
-            self.add_node_text(self.previously_selected_node, self.background_colour, "bold",
-                               self.nodes)
-            self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
             self.add_node_text(x_co, self.background_colour, "regular", self.nodes)
             self.add_node_text(x_co, self.node_selected_arc_colour, "bold", self.nodes)
             self.previously_selected_node = x_co
-        else:
+        elif self.previously_selected_node != -1:
             self.change_line_colors_for_point(self.previously_selected_node, self.graph_colour)
             self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
             self.add_node_text(self.previously_selected_node, self.background_colour, "bold",
                                self.nodes)
             self.add_node_text(self.previously_selected_node, self.graph_colour, "regular", self.nodes)
             self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
+            self.previously_selected_node = -1
 
     def click_on_arc(self, event):
         """
@@ -344,11 +346,11 @@ class ArcDiagram:
         to_node = ""
         line_weight = 0
 
-        if self.previously_selected_arc > 0:
+        if self.previously_selected_arc >= 0:
             self.change_arc_color(self.previously_selected_arc, self.graph_colour)
             self.previously_selected_arc = -1
 
-        if arc_id >= 0 and y_coordinate > 0.2:
+        if arc_id >= 0 and y_coordinate > 0.5/self.nodes_count:
             from_node = self.sources[arc_id]
             to_node = self.targets[arc_id]
             line_weight = self.weights[arc_id]

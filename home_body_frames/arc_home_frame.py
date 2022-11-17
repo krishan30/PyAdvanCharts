@@ -59,7 +59,7 @@ class ArcHome():
                                                    )
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
 
-        data_table = custom_table.get_table_for_arc(frame_right)
+        data_table = custom_table.get_table(frame_right)
         data_table.grid(row=1, column=0, columnspan=2, rowspan=4, pady=2, padx=20, sticky="nswe")
 
         # ==================Play with different graphs========================
@@ -88,7 +88,7 @@ class ArcHome():
             location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
                                           filetypes=[("CSV", ".csv")], parent=root)
 
-            df = pd.read_csv("./csv_samples/arc_diagram.csv")
+            df = pd.read_csv("./csv_samples/sankey_sample.csv")
  
             dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
                               }, index=range(len(df['Source'])))

@@ -16,4 +16,4 @@ class HomeFrameFactory():
         elif frame_no == 1:
             return ChordHome.get_frame(root, ChordChart(path="./csv_samples/sankey_sample.csv"), right_frame_width)
         elif frame_no == 2:
-            return ArcHome.get_frame(root, ArcDiagram(path="./csv_samples/arc_sample.csv"), right_frame_width)
+            return ArcHome.get_frame(root, ArcDiagram(path="./csv_samples/sankey_sample.csv"), right_frame_width)
