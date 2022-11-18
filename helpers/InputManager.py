@@ -24,7 +24,7 @@ class InputManager:
                     return "Column are not matched"
                 else:
                     return data_frame
-            except:
+            except :
                 ErrorHandler.handle_errors("Error", "File is empty", parent_window)
                 return "File is empty"
         return "File name is empty"
@@ -42,7 +42,8 @@ class InputManager:
                     return "Column are not matched"
                 else:
                     return data_frame
-            except:
+            except Exception as e:
+                print(e)
                 ErrorHandler.handle_errors("Error", "File is empty", parent_window)
                 return "File is empty"
         return "File name is empty"
