@@ -24,7 +24,6 @@ def get_upload_box(root, master, type, right_frame_width):
     def upload(frame):
 
         # give location of selected file
-        global file
         file = filedialog.askopenfilename(initialdir='.\\', title='Insert File',
                                           filetypes=[("CSV files", ".csv"), ("Excel files", ".xlsx"),
                                                      ("Excel other file type", ".xls")], parent=root)
@@ -98,8 +97,6 @@ def get_upload_box(root, master, type, right_frame_width):
             create_input_frame()
 
     def create_validate_file_frame(data_frame):
-        # TODO Validate input file in predefined format
-
         data_info, data_frame = DataPreprocessor.data_cleaner(data_frame)
         if data_info == "Data Frame is Empty":
             value = messagebox.showerror("Data Preprocessing Error", "There is no valid data available", parent=root)
@@ -131,7 +128,7 @@ def get_upload_box(root, master, type, right_frame_width):
     def generate_chart(data_frame):
         chart_diagram = None
         if type == 0:
-            chart_diagram = SankeyChart(file)
+            chart_diagram = SankeyChart(preprocessed_data_frame=data_frame)
         elif type == 1:
             chart_diagram = ChordChart(data_frame=data_frame)
         elif type == 2:
@@ -139,3 +136,4 @@ def get_upload_box(root, master, type, right_frame_width):
         master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram, right_frame_width)
 
     return upload_frame
+
