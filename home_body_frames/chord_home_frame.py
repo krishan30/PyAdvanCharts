@@ -3,6 +3,7 @@ from tkinter import filedialog, Y, ttk, messagebox
 import tkinter.messagebox
 import customtkinter
 import components.custom_table as custom_table
+from charts.chord_chart import ChordChart
 from helpers.graphs import *
 import pandas as pd
 
@@ -12,7 +13,10 @@ from components.upload_box import get_upload_box
 class ChordHome:
 
     @staticmethod
-    def get_frame(root, chord_diagram, right_frame_width):
+    def get_frame(root, right_frame_width):
+        path = "./csv_samples/sankey_sample.csv"
+        chord_diagram = ChordChart(path=path)
+
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
         main_frame.grid(row=0, column=1, sticky="nswe", padx=20, pady=20)
@@ -84,12 +88,12 @@ class ChordHome:
             location = filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
                                                 filetypes=[("CSV", ".csv")], parent=root)
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
+            df = pd.read_csv(path)
 
-            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target': df['Target'], 'Weight': df['Weight']
+            data_frame = pd.DataFrame({'Source': df['Source'], 'Target': df['Target'], 'Weight': df['Weight']
                                       }, index=range(len(df['Source'])))
             if location is not None:
-                dataFrame.to_csv(f"{location.name}.csv")
+                data_frame.to_csv(f"{location.name}.csv")
                 messagebox.showinfo("CSV File", "Save Completed", parent=root)
             else:
                 pass

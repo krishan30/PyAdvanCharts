@@ -1,9 +1,9 @@
 import tkinter
-import customtkinter
 from tkinter import filedialog, Y, ttk, messagebox
 import tkinter.messagebox
 import customtkinter
 import components.custom_table as custom_table
+from charts.arc_diagram import ArcDiagram
 from helpers.graphs import *
 import pandas as pd
 
@@ -13,9 +13,11 @@ from components.upload_box import get_upload_box
 class ArcHome():
 
     @staticmethod
-    def get_frame(root, arc_diagram, right_frame_width):
+    def get_frame(root, right_frame_width):
 
-        # arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
+        path = "./csv_samples/sankey_sample.csv"
+
+        arc_diagram = ArcDiagram(path=path)
 
         # set home frame grid
         main_frame = customtkinter.CTkFrame(master=root)
@@ -62,18 +64,12 @@ class ArcHome():
         data_table = custom_table.get_table(frame_right)
         data_table.grid(row=1, column=0, columnspan=2, rowspan=4, pady=2, padx=20, sticky="nswe")
 
-        # ==================Play with different graphs========================
-
-        # draw_simple_matplotlib_chart(frame_right)
-        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2, padx=20,
-                                                      sticky="ns")
-
-        # draw_simple_seaborn_chart(frame_right)
-        # draw_iris_data(frame_right)
+        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=2, columnspan=2, rowspan=4, pady=2,
+                                                                     padx=20,
+                                                                     sticky="ns")
 
         # function for open chart in a new window
         def open_graph():
-            # arc_diagram = ArcDiagram("./csv_samples/arc_sample.csv")
             figure = arc_diagram.generate_chart()
 
             window = customtkinter.CTkToplevel(root)
@@ -83,17 +79,17 @@ class ArcHome():
             chart = FigureCanvasTkAgg(figure, window)
             chart.get_tk_widget().pack(anchor=tkinter.N, fill=tkinter.BOTH, expand=True, side=tkinter.LEFT)
 
-        #function for download the sample csv file
+        # function for download the sample csv file
         def download_sample():
-            location=filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
-                                          filetypes=[("CSV", ".csv")], parent=root)
+            location = filedialog.asksaveasfile(initialdir='.\\', title='Insert File',
+                                                filetypes=[("CSV", ".csv")], parent=root)
 
-            df = pd.read_csv("./csv_samples/sankey_sample.csv")
- 
-            dataFrame = pd.DataFrame({'Source': df['Source'], 'Target':df['Target'], 'Weight': df['Weight']
-                              }, index=range(len(df['Source'])))
+            df = pd.read_csv(path)
+
+            data_frame = pd.DataFrame({'Source': df['Source'], 'Target': df['Target'], 'Weight': df['Weight']
+                                      }, index=range(len(df['Source'])))
             if location is not None:
-                dataFrame.to_csv(f"{location.name}.csv")
+                data_frame.to_csv(f"{location.name}.csv")
                 messagebox.showinfo("CSV File", "Save Completed", parent=root)
             else:
                 pass
@@ -101,8 +97,7 @@ class ArcHome():
         download_btn = customtkinter.CTkButton(master=frame_right,
                                                text="Download",
                                                command=download_sample
-
-                                               )  # font name and size in px
+                                               )
         download_btn.grid(row=5, column=0, columnspan=2, pady=10, padx=10)
 
         open_graph_btn = customtkinter.CTkButton(master=frame_right,
@@ -130,10 +125,4 @@ class ArcHome():
         upload_frame.grid(row=7, column=0, rowspan=4, columnspan=4, pady=100, padx=100, sticky="nswe")
         upload_frame.grid_propagate(0)
 
-        """
-        #modify frame in the bottom
-        modify_frame=customtkinter.CTkFrame(master=frame_right)
-        modify_frame.grid(row=12, column=0, rowspan=4,columnspan=4,pady=100,padx=200)
-        modify_frame.grid_propagate(0)
-        """
         return main_frame
