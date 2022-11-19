@@ -10,9 +10,9 @@ import seaborn as sns
 
 class SankeyChart:
 
-    def __init__(self, path):
+    def __init__(self, path=None, preprocessed_data_frame=None):
         self.path=path
-        
+        self.preprocessed_data_frame = preprocessed_data_frame
         self.init_datas()
     
 
@@ -28,7 +28,11 @@ class SankeyChart:
             self.strip_colorDict[label] = colorPalette[i]
 
     def init_datas(self):
-        df = pd.read_csv(self.path)
+        if self.path is None:
+            df = self.preprocessed_data_frame
+        else:
+            df = pd.read_csv(self.path)
+        
 
         self.font_size=11
         self.weight_font_size=6
@@ -53,13 +57,6 @@ class SankeyChart:
         self.to=df['Target']
         self.weight=df['Weight']
 
-        #remove index
-        """
-        if isinstance(self.from_, pd.Series):
-            self.from_ = self.from_.reset_index(drop=True)
-        if isinstance(self.to, pd.Series):
-            self.to = self.to.reset_index(drop=True)
-        """
         # Create Dataframe
         self.dataFrame = pd.DataFrame({'from_': self.from_, 'to': self.to, 'weight': self.weight
                               }, index=range(len(self.from_)))
@@ -74,8 +71,7 @@ class SankeyChart:
        
         # Identify to labels
         self.toLabels = pd.Series(self.dataFrame.to.unique()).unique()
-        #print(self.fromLabels)
-        #print(self.toLabels)
+      
     
     # Find height of each strip
     def strip_height(self):
@@ -86,8 +82,7 @@ class SankeyChart:
                 dict[toLabel] = self.dataFrame[(self.dataFrame.from_ == fromLabel) & (self.dataFrame.to == toLabel)].weight.sum()
 
             self.strips[fromLabel] = dict
-            
-        #print(self.strips)
+
        
 
     #find y positions of vertical blocks 
@@ -119,10 +114,9 @@ class SankeyChart:
                 self.topEdge = myD['top']
             self.toHeights[toLabel] = myD
         
-        #print(self.fromHeights)
-        #print(self.toHeights)
+        
 
-    #
+    #to draw blocks in axis
     def draw_blocks(self):
         self.xMax = self.topEdge / self.aspect
         for fromLabel in self.fromLabels:
@@ -227,7 +221,6 @@ class SankeyChart:
                   
         self.draw_blocks()
         self.draw_strips()
-        #plt.rcParams['figure.facecolor'] = self.bg_color
         
         plt.gca().axis('off') #get the current Axes and remove it
         plt.gcf().set_size_inches(self.graph_param)
