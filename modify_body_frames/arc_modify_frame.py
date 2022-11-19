@@ -1,10 +1,8 @@
 import tkinter
-import customtkinter
 from tkinter import filedialog, Y, ttk, messagebox
 import customtkinter
 from modify_box_frames.arc_modify_box import get_arc_modify_box
 from helpers.graphs import *
-import pandas as pd
 
 
 class ArcModify:
@@ -62,8 +60,9 @@ class ArcModify:
                                                    )
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=100)
 
-        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2, padx=20,
-                                                   sticky="ns")
+        draw_arc_diag(frame_right, arc_diagram).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
+                                                                     padx=20,
+                                                                     sticky="ns")
 
         # function for open chart in a new window
         def open_graph():
@@ -94,18 +93,11 @@ class ArcModify:
                                                )  # font name and size in px
         download_btn.grid(row=5, column=1, rowspan=1, columnspan=2, pady=10, padx=10)
 
-        open_graph_btn= customtkinter.CTkButton(master=frame_right,
-                                                    text="Full Screen View",
-                                                    command=open_graph
-                                                    )
+        open_graph_btn = customtkinter.CTkButton(master=frame_right,
+                                                 text="Full Screen View",
+                                                 command=open_graph
+                                                 )
         open_graph_btn.grid(row=0, column=3, columnspan=2, pady=10, padx=10)
-
-        """
-        #upload frame in the bottom
-        upload_frame=get_upload_box(frame_right)
-        upload_frame.grid(row=7, column=0, rowspan=4,columnspan=4,pady=10,padx=20)
-        upload_frame.grid_propagate(0)
-        """
 
         # modify frame in the bottom
         modify_frame = get_arc_modify_box(frame_right, root, arc_diagram, right_frame_width)
