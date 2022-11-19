@@ -61,7 +61,7 @@ class SankeyModify():
         create_chart_btn.grid(row=0, column=2, columnspan=2, pady=10, padx=10)
 
         draw_sankey(frame_right, sankeychart).get_tk_widget().grid(row=1, column=0, columnspan=4, rowspan=4, pady=2,
-                                                                   padx=20, sticky="ns")
+                                                                   padx=30, sticky="nwse")
 
         # function for open chart in a new window
         def open_graph():
