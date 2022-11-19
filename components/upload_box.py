@@ -98,7 +98,10 @@ def get_upload_box(root, master, type, right_frame_width):
 
     def create_validate_file_frame(data_frame):
         data_info, data_frame = DataPreprocessor.data_cleaner(data_frame)
-
+        if data_info == "Data Frame is Empty":
+            value = messagebox.showerror("Data Preprocessing Error", "There is no valid data available", parent=root)
+            create_input_frame()
+            return
         validate_file_frame = customtkinter.CTkFrame(master=upload_frame)
         validate_file_frame.pack(padx=100, pady=100, fill=tkinter.BOTH)
 
@@ -133,6 +136,4 @@ def get_upload_box(root, master, type, right_frame_width):
         master.frame_right = ModifyFrameFactory.get_modify_frame(type, master, chart_diagram, right_frame_width)
 
     return upload_frame
-
-
 

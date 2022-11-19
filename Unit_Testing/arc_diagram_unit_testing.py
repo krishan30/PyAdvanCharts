@@ -7,7 +7,7 @@ class ArcTestCase(unittest.TestCase):
 
     def test_get_lines_weights_for_duplicate_data(self):
         arc_diagram = ad.ArcDiagram("../csv_samples/test_arc.csv")
-        num_of_rows, sources, targets, weights = arc_diagram.get_information_from_file()
+        num_of_rows, sources, targets, weights = arc_diagram.get_information()
 
         arc_diagram.set_lines_weights_for_duplicate_data(sources, targets, weights, num_of_rows)
 
@@ -18,7 +18,7 @@ class ArcTestCase(unittest.TestCase):
         arc_diagram = ad.ArcDiagram("../csv_samples/test_arc.csv")
         # Add values to some attributes for testing
         arc_diagram.set_arc_equations([(2, 1)])  # Add (x-2)**2 + y**2 = 1
-        arc_diagram.set_weights([5])
+        arc_diagram.set_lines_width_values([5 / (5-1) * 2])
         arc_diagram.set_nodes_count(2)
 
         self.assertEqual(arc_diagram.check_point_on_arc_or_not(2, 1), 0)
@@ -33,7 +33,7 @@ class ArcTestCase(unittest.TestCase):
 
     def test_get_sorted_list_of_nodes_with_positions(self):
         arc_diagram = ad.ArcDiagram("../csv_samples/test_arc.csv")
-        num_of_rows, sources, targets, weights = arc_diagram.get_information_from_file()
+        num_of_rows, sources, targets, weights = arc_diagram.get_information()
 
         self.assertEqual(arc_diagram.get_sorted_list_of_nodes_with_positions(sources, targets),
                          (['A', 'B', 'C', 'D'], {'A': 0, 'B': 1, 'C': 2, 'D': 3}))
