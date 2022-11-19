@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import rgb2hex
 from matplotlib.patches import Arc
 import pandas as pd
 from matplotlib.widgets import Cursor
@@ -19,15 +20,15 @@ class ArcDiagram:
         self.fig = None
         self.path = path
         self.data_frame = data_frame
-        self.graph_colour = "blue"
+        self.graph_colour = "#0000ff"
         self.title = "Arc Diagram"
         self.sub_title = None
-        self.title_font_colour = "blue"
+        self.title_font_colour = "#0000ff"
         self.title_font_type = "serif"
         self.title_font_size = 20
-        self.background_colour = "white"
-        self.node_selected_arc_colour = "red"
-        self.selected_line_colour = "green"
+        self.background_colour = "#ffffff"
+        self.node_selected_arc_colour = "#ff0000"
+        self.selected_line_colour = "#008000"
         self.font_size = 10
         self.font_type = "serif"
         self.line_width_multiplier = 2
@@ -308,6 +309,7 @@ class ArcDiagram:
         x_co = round(x1, 1)
         y_co = round(y1, 1)
         if y_co == 0.0 and x_co.is_integer():
+            # Set arc style to default those arcs starting from previously selected node
             if self.previously_selected_node >= 0:
                 self.change_line_colors_for_point(self.previously_selected_node, self.graph_colour)
                 self.ax.scatter(self.previously_selected_node, 0, marker='o', color=self.graph_colour)
@@ -347,10 +349,11 @@ class ArcDiagram:
         line_weight = 0
 
         if self.previously_selected_arc >= 0:
-            self.change_arc_color(self.previously_selected_arc, self.graph_colour)
+            if rgb2hex(self.ax.patches[self.previously_selected_arc].get_facecolor()) != self.node_selected_arc_colour:
+                self.change_arc_color(self.previously_selected_arc, self.graph_colour)
             self.previously_selected_arc = -1
 
-        if arc_id >= 0 and y_coordinate > 0.5/self.nodes_count:
+        if arc_id >= 0 > self.previously_selected_node and y_coordinate > 0:
             from_node = self.sources[arc_id]
             to_node = self.targets[arc_id]
             line_weight = self.weights[arc_id]
@@ -699,7 +702,7 @@ class ArcDiagram:
         def on_add(select):
             select.annotation.set(text=self.nodes[select.index])
 
-        cursor = Cursor(self.ax, horizOn=False, vertOn=False)
+        Cursor(self.ax, horizOn=False, vertOn=False)
 
         # Draw arcs according to the data in lines dictionary
         gid = 0
