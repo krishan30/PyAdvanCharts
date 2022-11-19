@@ -101,7 +101,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
         else:
             weight = "Enter node 1 & node 2"
         weight_display_label = customtkinter.CTkLabel(master=modify_frame, text=weight, anchor=E,
-                                                  fg_color="#1F6AA5", corner_radius=5)
+                                                      fg_color="#1F6AA5", corner_radius=5)
         weight_display_label.grid(row=10, column=2, pady=10, padx=60, sticky="e")
 
     # Regenerate graph according to the new changes
@@ -145,7 +145,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                                        text_font=("serif", 15))
     chart_configuration_label.grid(row=1, column=0, pady=10, padx=50, sticky="w")
 
-    # bg color selection
+    # Background color selection
     bg_color_label = customtkinter.CTkLabel(master=modify_frame, text="Background Color :", anchor=E)
     bg_color_label.grid(row=2, column=0, pady=10, padx=50, sticky="w")
 
@@ -155,7 +155,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                            )
     bg_color_btn.grid(row=2, column=0, pady=10, padx=70, sticky="e")
 
-    # arc(normal) color selection
+    # Arc(normal) color selection
     arc_color_label = customtkinter.CTkLabel(master=modify_frame, text="Arc Line Color :", anchor=E)
     arc_color_label.grid(row=3, column=0, pady=10, padx=50, sticky="w")
 
@@ -165,7 +165,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                             )
     arc_color_btn.grid(row=3, column=0, pady=10, padx=70, sticky="e")
 
-    # arcs with selected node color selection
+    # Arcs with selected node color selection
     arc_color_label = customtkinter.CTkLabel(master=modify_frame, text="Arc(Node selected) Color :", anchor=E)
     arc_color_label.grid(row=4, column=0, pady=10, padx=50, sticky="w")
 
@@ -175,7 +175,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                             )
     arc_color_btn.grid(row=4, column=0, pady=10, padx=70, sticky="e")
 
-    # selected arc color selection
+    # Selected arc color selection
     arc_color_label = customtkinter.CTkLabel(master=modify_frame, text="Arc(Selected) Color :", anchor=E)
     arc_color_label.grid(row=5, column=0, pady=10, padx=50, sticky="w")
 
@@ -185,14 +185,14 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                             )
     arc_color_btn.grid(row=5, column=0, pady=10, padx=70, sticky="e")
 
-    # change font size
+    # Font size selection
     font_size_menu_label = customtkinter.CTkLabel(master=modify_frame, text="Font Size :", anchor=E)
     font_size_menu_label.grid(row=6, column=0, pady=10, padx=50, sticky="w")
 
     font_size_menu = customtkinter.CTkOptionMenu(master=modify_frame,
-                                                       values=[str(i) for i in range(5, 26)],
-                                                       command=set_font_size
-                                                       )
+                                                 values=[str(i) for i in range(5, 26)],
+                                                 command=set_font_size
+                                                 )
     font_size_menu.set(arc_diagram.get_font_size())
     font_size_menu.grid(row=6, column=0, pady=10, padx=70, sticky="e")
 
@@ -206,14 +206,14 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
     font_type_menu.set("serif")
     font_type_menu.grid(row=7, column=0, pady=10, padx=70, sticky="e")
 
-    # change line width
+    # Line width selection
     arc_width_label = customtkinter.CTkLabel(master=modify_frame, text="Arc Width Size :", anchor=E)
     arc_width_label.grid(row=8, column=0, pady=10, padx=50, sticky="w")
 
     arc_width_size_menu = customtkinter.CTkOptionMenu(master=modify_frame,
-                                                       values=[str(i) for i in range(1, 6)],
-                                                       command=set_line_width_multiplier_size
-                                                       )
+                                                      values=[str(i) for i in range(1, 6)],
+                                                      command=set_line_width_multiplier_size
+                                                      )
     arc_width_size_menu.set(arc_diagram.get_line_width_multiplier())
     arc_width_size_menu.grid(row=8, column=0, pady=10, padx=70, sticky="e")
 
@@ -250,7 +250,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                                    )
     title_font_color_btn.grid(row=3, column=2, pady=10, padx=60, sticky="e")
 
-    # Change font type of the title
+    # Font type of the title selection
     title_font_type_label = customtkinter.CTkLabel(master=modify_frame, text="Title Font Type:", anchor=E)
     title_font_type_label.grid(row=4, column=2, pady=10, padx=10, sticky="w")
 
@@ -262,7 +262,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
     title_font_type_menu.set(arc_diagram.get_title_font_type())
     title_font_type_menu.grid(row=4, column=2, pady=10, padx=60, sticky="e")
 
-    # Change title font size
+    # Title font size selection
     title_font_size_label = customtkinter.CTkLabel(master=modify_frame, text="Title Font Size:", anchor=E)
     title_font_size_label.grid(row=5, column=2, pady=10, padx=10, sticky="w")
 
@@ -273,7 +273,7 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
     title_font_size_menu.set(str(arc_diagram.get_title_font_size()))
     title_font_size_menu.grid(row=5, column=2, pady=10, padx=60, sticky="e")
 
-    # Find weight
+    # Find weight section
     title_configuration_label = customtkinter.CTkLabel(master=modify_frame, text="Find Weight",
                                                        text_font=("serif", 15), anchor=W)
     title_configuration_label.grid(row=7, column=2, pady=10, padx=10, sticky="w")
@@ -297,11 +297,11 @@ def get_arc_modify_box(root, root_parent, arc_diagram, right_frame_width):
                                                   fg_color="#1F6AA5", corner_radius=5)
     weight_display_label.grid(row=10, column=2, pady=10, padx=60, sticky="e")
 
-    # Find weight between given nodes here
+    # Find weight button
     find_weight_btn = customtkinter.CTkButton(master=modify_frame,
-                                               text="Find weight",
-                                               command=find_weight
-                                               )
+                                              text="Find weight",
+                                              command=find_weight
+                                              )
     find_weight_btn.grid(row=11, column=2, pady=10, padx=60)
 
     # regenerate graph button
